@@ -1,4 +1,4 @@
-package edu.elte.hu;
+package edu.elte.spring.loris;
 
 import java.text.DateFormat;
 import java.util.Date;
