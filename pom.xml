@@ -56,6 +56,12 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>4.2.1.RELEASE</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
 			<version>55.1</version>
@@ -273,59 +279,17 @@
 			<version>${dandelion.version}</version>
 		</dependency>
 
-		<!-- Hive -->
+		<!-- Kundera -->
 		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-metastore</artifactId>
-			<version>0.12.0-cdh5.0.0</version>
+			<groupId>com.impetus.kundera.core</groupId>
+			<artifactId>kundera-core</artifactId>
+			<version>3.1</version>
 		</dependency>
-
+		<!-- v1 könyvtár WELD hibát okoz -->
 		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-service</artifactId>
-			<version>0.12.0-cdh5.0.0</version>
-		</dependency>
-
-		<!-- runtime Hive -->
-		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-common</artifactId>
-			<version>0.12.0-cdh5.0.0</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-beeline</artifactId>
-			<version>0.12.0-cdh5.0.0</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-jdbc</artifactId>
-			<version>0.12.0-cdh5.0.0</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-shims</artifactId>
-			<version>0.12.0-cdh5.0.0</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-serde</artifactId>
-			<version>0.12.0-cdh5.0.0</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-contrib</artifactId>
-			<version>0.12.0-cdh5.0.0</version>
-			<scope>runtime</scope>
+			<groupId>com.impetus.kundera.client</groupId>
+			<artifactId>kundera-hbase-v2</artifactId>
+			<version>3.1</version>
 		</dependency>
 
 		<!-- Test -->

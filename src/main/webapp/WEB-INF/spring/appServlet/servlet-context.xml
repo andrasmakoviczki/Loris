@@ -8,6 +8,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	 <beans:import resource="thread.xml"/>
+	 <beans:import resource="kundera-context.xml"/>
 	<!-- DispatcherServlet Context: defines this servlet's request-processing 
 		infrastructure -->
 
