@@ -9,6 +9,14 @@ import java.util.List;
 import java.util.Locale;
 
 import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+import javax.persistence.PersistenceUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -24,6 +32,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.elte.spring.loris.backend.dao.HBaseEntityManager;
+import edu.elte.spring.loris.backend.dao.HbaseEntityManagerImpl;
+import edu.elte.spring.loris.backend.entity.User;
+import edu.elte.spring.loris.backend.entity.UserHBase;
 import edu.elte.spring.loris.model.HttpGetter;
 //import edu.elte.spring.loris.model.PrintTask;
 import edu.elte.spring.loris.model.rssStream.GetContent;
@@ -60,7 +72,12 @@ public class HomeController {
 		
 		//logger.warn(write());
 		String formattedDate = dateFormat.format(date);
-		
+		HbaseEntityManagerImpl hbase = new HbaseEntityManagerImpl("hbase-pu");
+		hbase.createEntityManager();
+		hbase.createUser();
+        
+		/*List<UserHBase> u = hbase.getAllUsers();
+		logger.info(Integer.toString(u.size()));*/
 		//
 		
 		/*ApplicationContext apx = new ClassPathXmlApplicationContext("thread.xml");
