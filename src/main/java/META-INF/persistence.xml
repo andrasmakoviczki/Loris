@@ -6,6 +6,8 @@
 		<provider>com.impetus.kundera.KunderaPersistence</provider>
 		<class>edu.elte.spring.loris.backend.entity.UserHBase</class>
 		<class>edu.elte.spring.loris.backend.entity.User</class>
+		<class>edu.elte.spring.loris.backend.entity.Channel</class>
+		<class>edu.elte.spring.loris.backend.entity.FeedEntry</class>
 		<properties>
 			<property name="kundera.nodes" value="localhost" />
 			<property name="kundera.port" value="2181" />
