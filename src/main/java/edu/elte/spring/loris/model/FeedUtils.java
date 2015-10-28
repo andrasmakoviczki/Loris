@@ -1,38 +1,14 @@
 package edu.elte.spring.loris.model;
 
-import java.io.StringReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
-/*import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Document.OutputSettings;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Entities.EscapeMode;
-import org.jsoup.safety.Cleaner;
-import org.jsoup.safety.Whitelist;
-import org.jsoup.select.Elements;
-import org.w3c.css.sac.InputSource;*/
-import org.w3c.dom.css.CSSStyleDeclaration;
 
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
-//import com.steadystate.css.parser.CSSOMParser;*/
-
 
 /**
  * Utility methods related to feed handling
@@ -40,11 +16,11 @@ import com.ibm.icu.text.CharsetMatch;
  */
 public class FeedUtils {
 
-	private static final String ESCAPED_QUESTION_MARK = Pattern.quote("?");
+	//private static final String ESCAPED_QUESTION_MARK = Pattern.quote("?");
 
-	private static final List<String> ALLOWED_IFRAME_CSS_RULES = Arrays.asList("height", "width", "border");
-	private static final List<String> ALLOWED_IMG_CSS_RULES = Arrays.asList("display", "width", "height");
-	private static final char[] FORBIDDEN_CSS_RULE_CHARACTERS = new char[] { '(', ')' };
+	//private static final List<String> ALLOWED_IFRAME_CSS_RULES = Arrays.asList("height", "width", "border");
+	//private static final List<String> ALLOWED_IMG_CSS_RULES = Arrays.asList("display", "width", "height");
+	//private static final char[] FORBIDDEN_CSS_RULE_CHARACTERS = new char[] { '(', ')' };
 
 	//private static final Whitelist WHITELIST = buildWhiteList();
 

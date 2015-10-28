@@ -1,10 +1,10 @@
-package edu.elte.spring.loris.model;
+package edu.elte.spring.loris.backend.util;
 
-public class PrintTask implements Runnable{
+public class TaskStreamingChannel implements Runnable{
 
 	String name;
 	
-	public PrintTask(String name){
+	public TaskStreamingChannel(String name){
 		this.name = name;
 	}
 	

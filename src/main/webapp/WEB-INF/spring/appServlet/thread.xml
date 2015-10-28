@@ -1,42 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:int="http://www.springframework.org/schema/integration"
-	xmlns:task="http://www.springframework.org/schema/task"
-	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 
-<!--    	<bean id="miscPool" -->
-<!-- 		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> -->
-<!-- 		<property name="corePoolSize" value="5" /> -->
-<!-- 		<property name="maxPoolSize" value="10" /> -->
-<!-- 		<property name="queueCapacity" value="250" /> -->
-		
-<!-- 	</bean> -->
+	<!-- <bean id="miscPool" -->
+	<!-- class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> -->
+	<!-- <property name="corePoolSize" value="5" /> -->
+	<!-- <property name="maxPoolSize" value="10" /> -->
+	<!-- <property name="queueCapacity" value="250" /> -->
 
-<!--   	<int:annotation-config /> -->
-<!-- 	<int:publish-subscribe-channel id="bus" /> -->
-<!--  	<int:publish-subscribe-channel id="busAsync" -->
-<!-- 		task-executor="miscPool" ignore-failures="true" /> -->
-<!-- 	<int:publish-subscribe-channel id="busSync" -->
-<!-- 		ignore-failures="true" /> -->
-<!-- 	<int:recipient-list-router id="busRouter" -->
-<!-- 		input-channel="bus" ignore-send-failures="true" apply-sequence="true"> -->
-<!-- 		<int:recipient channel="busAsync" /> -->
-<!--  		<int:recipient channel="busSync" /> -->
-<!-- 	</int:recipient-list-router> -->
-<!-- 	<int:gateway id="busGateway" service-interface="edu.elte.spring.loris.model.test.BusGateway" /> 
- -->
- 
- 	    <task:annotation-driven />
-    <bean id="demoServiceXmlConfig" class="edu.elte.spring.loris.model.test.DemoServiceXmlConfig" />
- 
-    <task:scheduled-tasks>
-        <task:scheduled ref="demoServiceXmlConfig" method="demoServiceMethod" fixed-delay="10000"></task:scheduled>
-    </task:scheduled-tasks>
+	<!-- </bean> -->
+
+	<!-- <int:annotation-config /> -->
+	<!-- <int:publish-subscribe-channel id="bus" /> -->
+	<!-- <int:publish-subscribe-channel id="busAsync" -->
+	<!-- task-executor="miscPool" ignore-failures="true" /> -->
+	<!-- <int:publish-subscribe-channel id="busSync" -->
+	<!-- ignore-failures="true" /> -->
+	<!-- <int:recipient-list-router id="busRouter" -->
+	<!-- input-channel="bus" ignore-send-failures="true" apply-sequence="true"> -->
+	<!-- <int:recipient channel="busAsync" /> -->
+	<!-- <int:recipient channel="busSync" /> -->
+	<!-- </int:recipient-list-router> -->
+	<!-- <int:gateway id="busGateway" service-interface="edu.elte.spring.loris.model.test.BusGateway" 
+		/> -->
+
+	<task:annotation-driven />
+	<bean id="StreamingChannel" class="edu.elte.spring.loris.backend.util.StreamingChannel" />
+
+<!-- 	<task:scheduled-tasks> -->
+<!-- 		<task:scheduled ref="demoServiceXmlConfig" method="demoServiceMethod"></task:scheduled> -->
+<!-- 	</task:scheduled-tasks> -->
+
+	<!-- <task:annotation-driven executor="myExecutor" -->
+	<!-- scheduler="myScheduler" /> -->
+	<!-- <task:executor id="myExecutor" pool-size="5" /> -->
+	<!-- <task:scheduler id="myScheduler" pool-size="10" /> -->
 </beans>

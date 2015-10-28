@@ -9,7 +9,7 @@
 
 	 <beans:import resource="thread.xml"/>
 	 <beans:import resource="kundera-context.xml"/>
-	 <beans:import resource="mvc-view.xml"/>
+	 <beans:import resource="mvc-core.xml"/>
 	<!-- DispatcherServlet Context: defines this servlet's request-processing 
 		infrastructure -->
 
@@ -30,5 +30,4 @@
 	
 
 	<context:component-scan base-package="edu.elte.spring.loris" />	
-
 </beans:beans>

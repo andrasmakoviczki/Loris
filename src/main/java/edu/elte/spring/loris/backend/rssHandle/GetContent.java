@@ -1,10 +1,8 @@
-package edu.elte.spring.loris.model.rssStream;
+package edu.elte.spring.loris.backend.rssHandle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-import edu.elte.spring.loris.model.FeedRefreshExecutor;
 
 public class GetContent {
 
@@ -21,8 +19,8 @@ public class GetContent {
 	}
 
 	public GetContent() {
-		int timeout = 20000;
-		String url = "http://index.hu/24ora/rss/default/";
+		//int timeout = 20000;
+		//String url = "http://index.hu/24ora/rss/default/";
 
 		str = new String();
 		// executor = new FeedRefreshExecutor("pool", 1, 50);

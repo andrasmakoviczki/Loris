@@ -4,17 +4,18 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="hbase-pu">
 		<provider>com.impetus.kundera.KunderaPersistence</provider>
-		<class>edu.elte.spring.loris.backend.entity.UserHBase</class>
+		<class>edu.elte.spring.loris.backend.entity.Topic</class>
 		<class>edu.elte.spring.loris.backend.entity.User</class>
 		<class>edu.elte.spring.loris.backend.entity.Channel</class>
 		<class>edu.elte.spring.loris.backend.entity.FeedEntry</class>
+		<class>edu.elte.spring.loris.backend.entity.Category</class>
 		<properties>
 			<property name="kundera.nodes" value="localhost" />
 			<property name="kundera.port" value="2181" />
-			<property name="kundera.keyspace" value="hbaseDB" />
+			<property name="kundera.keyspace" value="loris" />
 			<property name="kundera.dialect" value="hbase" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.hbase.HBaseClientFactory" />
-			<property name="kundera.ddl.auto.prepare" value="create" />
+			<property name="kundera.ddl.auto.prepare" value="update" />
 			<!-- <property name="kundera.client.property" value="hbase.properties" 
 				/> -->
 <!-- 			<property name="kundera.cache.provider.class" -->

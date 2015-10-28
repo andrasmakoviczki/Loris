@@ -10,8 +10,11 @@
 		<config>src/main/webapp/WEB-INF/spring/appServlet/thread.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/kundera-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/mvc-view.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/mvc-core.xml</config>
 	</configs>
 	<autoconfigs>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/root-context.xml</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

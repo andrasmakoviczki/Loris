@@ -1,4 +1,4 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
@@ -9,14 +9,33 @@
 </head>
 <body>
 	<p>hello</p>
-	<h3>
-		<p th:utext="${serverTime}"></p>
-		time
-	</h3>
+	<p th:text="${serverTime}">time</p>
+
 	<form action="#" th:action="@{/processForm}" th:object="${foo}"
 		method="post">
-		<input type="text" th:field="*{link}" /> <input type="submit" />
+		<input type="text" th:field="*{link}" />
+		<p th:if="${#fields.hasErrors('link')}" th:errors="*{link}"></p>
+		<input type="submit" />
 	</form>
+
+	<table>
+		<tbody>
+			<tr>
+				<td>alma</td>
+				<td>korte</td>
+				<td>barack</td>
+			</tr>
+
+			<tr th:each="l : ${listEntry}">
+				<td th:text="${l.title}"></td>
+				<td th:text="${l.content}"></td>
+				<td th:text="${l.category}"></td>
+			</tr>
+		</tbody>
+	</table>
+
+
+
 </body>
 
 </html>
