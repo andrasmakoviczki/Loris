@@ -14,14 +14,8 @@
 		<org.slf4j-version>1.7.12</org.slf4j-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<repositories>
-		<!-- <repository> -->
-		<!-- <id>cloudera</id> -->
-		<!-- <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url> -->
-		<!-- </repository> -->
-	</repositories>
-	<dependencies>
 
+	<dependencies>
 
 		<!-- Spring -->
 		<dependency>
@@ -64,16 +58,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.ibm.icu</groupId>
-			<artifactId>icu4j</artifactId>
-			<version>55.1</version>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>4.0.2.RELEASE</version>
 		</dependency>
-
-		<!-- Thymeleaf -->
 		<dependency>
-			<groupId>org.thymeleaf</groupId>
-			<artifactId>thymeleaf-spring4</artifactId>
-			<version>2.1.4.RELEASE</version>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>4.0.2.RELEASE</version>
 		</dependency>
 
 
@@ -153,6 +145,8 @@
 			<version>1.2</version>
 		</dependency>
 
+		<!-- Apache Http -->
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -184,7 +178,6 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>
@@ -201,6 +194,24 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.5</version>
+		</dependency>
+
+		<!-- Thymeleaf -->
+		<dependency>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf-spring4</artifactId>
+			<version>2.1.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
+			<version>2.1.2.RELEASE</version>
+		</dependency>
+
 
 		<!-- ROME RSS -->
 		<dependency>
@@ -230,7 +241,6 @@
 			<artifactId>fallback-impl</artifactId>
 			<version>3.1</version>
 		</dependency>
-
 		<!-- v1 könyvtár WELD hibát okoz -->
 		<dependency>
 			<groupId>com.impetus.kundera.client</groupId>
@@ -247,6 +257,8 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<!-- Hadoop -->
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-common</artifactId>
@@ -256,16 +268,6 @@
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-auth</artifactId>
 			<version>2.7.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20150729</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpmime</artifactId>
-			<version>4.5</version>
 		</dependency>
 
 		<!-- Hibernate -->
@@ -278,6 +280,30 @@
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
 			<version>2.1.6</version>
+		</dependency>
+
+		<!-- Bootstrap -->
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>jquery</artifactId>
+			<version>2.1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>3.3.5</version>
+		</dependency>
+
+		<!-- Others -->
+		<dependency>
+			<groupId>com.ibm.icu</groupId>
+			<artifactId>icu4j</artifactId>
+			<version>55.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20150729</version>
 		</dependency>
 
 		<!-- Test -->

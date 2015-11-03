@@ -1,4 +1,4 @@
-package edu.elte.spring.loris.model;
+package trash;
 
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.RejectedExecutionHandler;

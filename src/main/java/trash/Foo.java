@@ -1,4 +1,4 @@
-package edu.elte.spring.loris;
+package trash;
 
 public class Foo {
 	  private String bar;

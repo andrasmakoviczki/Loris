@@ -1,41 +1,98 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.springframework.org/schema/security">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>PetClinic :: a Spring Framework demonstration</title>
+<meta http-equiv="Content-Type" content="text/html" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+
+<link
+	href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5.css/bootstrap.min.css"
+	th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"
+	rel="stylesheet" media="screen" />
+
+<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
+	th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+
+<link type="text/css" rel="stylesheet"
+	href="../../resources/css/sidebar.css"
+	data-th-href="@{/resources/css/sidebar.css}" />
+
+<link type="text/css" rel="stylesheet"
+	href="../../resources/css/style.css"
+	data-th-href="@{/resources/css/style.css}" />
+
+<script type="text/javascript" src="../../resources/js/sidebar.js"
+	data-th-src="@{/resources/js/sidebar.js}"></script>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<title>Loris</title>
 </head>
 <body>
-	<p>hello</p>
-	<p th:text="${serverTime}">time</p>
+	<div th:replace="fragments/head :: head">&nbsp;</div>
 
-	<form action="#" th:action="@{/processForm}" th:object="${foo}"
-		method="post">
-		<input type="text" th:field="*{link}" />
-		<p th:if="${#fields.hasErrors('link')}" th:errors="*{link}"></p>
-		<input type="submit" />
-	</form>
+	<div class="container">
+		<div class="bs-docs-sidebar">
+			<div
+				class="collapse navbar-collapse navbar-right">
+				<ul class="nav nav-list bs-docs-sidenav affix">
+					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							<i class="icon-user"></i>Csatornák <span class="caret"></span>
+					</a>
+						<ul class="dropdown-menu" role="menu">
+							<li role="presentation"><a id="logout" href="#">Sign Out</a></li>
+						</ul></li>
+				</ul>
+			</div>
+		</div>
+		<p>hello</p>
+		<p th:text="${serverTime}">time</p>
 
-	<table>
-		<tbody>
-			<tr>
-				<td>alma</td>
-				<td>korte</td>
-				<td>barack</td>
-			</tr>
+		<form class="navbar-form navbar-left" action="#"
+			th:action="@{/processForm}" th:object="${foo}" method="post">
+			<div class="form-group">
+				<!-- placeholder: szöveg a keresődobozban -->
+				<input type="text" class="form-control" th:field="*{link}"
+					placeholder="Search" />
+			</div>
+			<p th:if="${#fields.hasErrors('link')}" th:errors="*{link}"></p>
+			<button th:text="Submit" type="submit" class="btn btn-default"></button>
+		</form>
 
-			<tr th:each="l : ${listEntry}">
-				<td th:text="${l.title}"></td>
-				<td th:text="${l.content}"></td>
-				<td th:text="${l.category}"></td>
-			</tr>
-		</tbody>
-	</table>
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="col-sm-4 text-center">Cím</th>
+					<th class="col-sm-4 text-center">Tartalom</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-th-each="l : ${listEntry}">
+					<td data-th-text="${l.title}">1</td>
+					<td data-th-text="${l.content}">Iron Butterfly</td>
+				</tr>
+			</tbody>
+		</table>
 
-
-
+		<table>
+			<tbody>
+				<tr>
+					<td>alma</td>
+					<td>korte</td>
+					<td>barack</td>
+				</tr>
+				<tr>
+					<td>árvíztűrőtükörfúrógép</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </body>
 
 </html>

@@ -28,7 +28,7 @@
 	<!-- <int:recipient channel="busAsync" /> -->
 	<!-- <int:recipient channel="busSync" /> -->
 	<!-- </int:recipient-list-router> -->
-	<!-- <int:gateway id="busGateway" service-interface="edu.elte.spring.loris.model.test.BusGateway" 
+	<!-- <int:gateway id="busGateway" service-interface="trash.test.BusGateway" 
 		/> -->
 
 	<task:annotation-driven />

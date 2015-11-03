@@ -17,6 +17,7 @@ import org.apache.http.util.EntityUtils;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.sun.syndication.feed.synd.SyndEntryImpl;
@@ -38,12 +39,9 @@ public class StreamingChannel {
 		this.channelService = new ChannelServiceImpl();
 		this.channelList = channelService.listChannel();
 	}
-
-	/*
-	 * @Async
-	 * 
-	 * @Scheduled(fixedDelay = 10000)
-	 */
+	
+	@Async 
+	//@Scheduled(fixedDelay = 10000) 
 	public void demoServiceMethod() {
 		for (Channel c : channelService.listChannel()) {
 			rssFeedDownload feeder;
@@ -72,7 +70,7 @@ public class StreamingChannel {
 	}
 
 	// @Async
-	@Scheduled(fixedDelay = 10000)
+	//@Scheduled(fixedDelay = 10000)
 	public void JobServerServiceMethod() {
 
 		// try {

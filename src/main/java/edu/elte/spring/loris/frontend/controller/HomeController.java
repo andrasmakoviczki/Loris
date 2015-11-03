@@ -1,4 +1,4 @@
-package edu.elte.spring.loris;
+package edu.elte.spring.loris.frontend.controller;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -21,7 +21,9 @@ import com.sun.syndication.io.FeedException;
 
 import edu.elte.spring.loris.backend.entity.Channel;
 import edu.elte.spring.loris.backend.entity.FeedEntry;
+import edu.elte.spring.loris.backend.service.ChannelService;
 import edu.elte.spring.loris.backend.service.ChannelServiceImpl;
+import edu.elte.spring.loris.backend.service.FeedEntryService;
 import edu.elte.spring.loris.backend.service.FeedEntryServiceImpl;
 import edu.elte.spring.loris.backend.util.ChannelException;
 import edu.elte.spring.loris.frontend.model.ChannelModel;;
@@ -35,11 +37,16 @@ public class HomeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	// @Autowired
-	private ChannelServiceImpl channel;
-	//private FeedEntryServiceImpl fe;
+	private ChannelService channel;
+	private FeedEntryService fe;
 
 	HomeController() {
 		this.channel = new ChannelServiceImpl();
+	}
+
+	@RequestMapping("/showContentPart")
+	public String showContentPart() {
+	    return "content-part";
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -52,7 +59,7 @@ public class HomeController {
 		String formattedDate = dateFormat.format(date);
 
 		model.addAttribute("serverTime", formattedDate);
-//		model.addAttribute("fe",fe.listFeedEntry());
+		//model.addAttribute("fe",fe.listFeedEntry());
 
 		return "home";
 	}
@@ -61,15 +68,17 @@ public class HomeController {
 	public ChannelModel prepareChannelModel() {
 		return new ChannelModel();
 	}
-	
+
 	@ModelAttribute("listEntry")
-	public List<FeedEntry> listEntry(){
-		return new FeedEntryServiceImpl().listFeedEntry();
+	public List<FeedEntry> listEntry() {
+		List<FeedEntry> l = new FeedEntryServiceImpl().listFeedEntry();
+		Integer size = l.size();
+		return l;
 	}
 
 	@RequestMapping(value = "/processForm", method = RequestMethod.POST)
 	public String addChannel(@Valid @ModelAttribute(value = "foo") ChannelModel foo, BindingResult result) {
-		
+
 		if (result.hasErrors()) {
 			return "home";
 		}
@@ -77,13 +86,13 @@ public class HomeController {
 		try {
 			channel.insertChannel(foo.getLink());
 		} catch (IllegalArgumentException | FeedException | IOException e) {
-			result.rejectValue("link","error.link", "Cannot parse this URL."); 
+			result.rejectValue("link", "error.link", "Cannot parse this URL.");
 			return "home";
 		} catch (ChannelException e) {
-			result.rejectValue("link","error.link", String.format("Channel already exists: %s", foo.getLink())); 
+			result.rejectValue("link", "error.link", String.format("Channel already exists: %s", foo.getLink()));
 			return "home";
 		}
-		
+
 		logger.info("Inserted channelService: {}.", foo.getLink());
 
 		for (Channel ch : channel.listChannel()) {

@@ -1,5 +1,6 @@
 package edu.elte.spring.loris.backend.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,15 +48,31 @@ public class FeedEntryServiceImpl implements FeedEntryService {
 
 	@Override
 	public List<FeedEntry> listFeedEntry() {
-		List<?> fe = em.findByQuery("select fe from FeedEntry fe");
-		return (List<FeedEntry>) fe;
+		List<?> q = em.findByQuery("select fe from FeedEntry fe");
+		
+		List<FeedEntry> fe = new ArrayList<>();
+		for (Object object : q) {
+			if (object instanceof FeedEntry) {
+				fe.add((FeedEntry) object);
+			}
+		}
+		
+		return fe;
 	}
 
 	@Override
 	public List<FeedEntry> findFeedEntrybyDate(Date date) {
 		String query = new String("select fe from " + FeedEntry.class.getSimpleName() + " fe where fe.link = :d");
-		List<?> fe = em.findByQuery(query,"d",date);
-		return (List<FeedEntry>) fe;
+		List<?> q = em.findByQuery(query,"d",date);
+		
+		List<FeedEntry> fe = new ArrayList<>();
+		for (Object object : q) {
+			if (object instanceof FeedEntry) {
+				fe.add((FeedEntry) object);
+			}
+		}
+		
+		return fe;
 	}
 
 }

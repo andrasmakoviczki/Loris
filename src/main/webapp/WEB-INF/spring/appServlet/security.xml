@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns:b="http://www.springframework.org/schema/beans"
+	xmlns="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/security	http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<global-method-security secured-annotations="enabled" />
+	<http pattern="/resources/**" security="none" />
+	<http pattern="/webjars/**" security="none" />
+
+	<http auto-config="true" use-expressions="true">
+		<!-- Ezek az oldalak engedélyezettek -->
+		<intercept-url pattern="/*" access="permitAll" />
+		<intercept-url pattern="/sign/*" access="permitAll" />
+		<!-- <intercept-url pattern="/signup/*" access="permitAll" /> -->
+		<!-- <intercept-url pattern="/logout" access="permitAll" /> -->
+		<!-- <intercept-url pattern="/errors/**" access="permitAll" /> -->
+<!-- 		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" /> -->
+		<!-- <access-denied-handler error-page="/errors/403" /> -->
+ 		<form-login login-page="/sign" login-processing-url="/sign" 
+ 			username-parameter="username" password-parameter="password" 
+ 			authentication-failure-url="/" default-target-url="/" /> 
+		<!-- <logout logout-url="/logout" logout-success-url="/login/form?logout" 
+			/> -->
+		<csrf disabled="true" />
+	</http>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="CustomUserDetailsService"></authentication-provider>
+	</authentication-manager>
+
+	<b:bean id="CustomUserDetailsService"
+		class="edu.elte.spring.loris.backend.security.CustomUserDetailsService" />
+
+
+</b:beans>

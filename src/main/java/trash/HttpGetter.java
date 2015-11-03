@@ -1,4 +1,4 @@
-package edu.elte.spring.loris.model;
+package trash;
 
 import java.io.IOException;
 import java.security.SecureRandom;

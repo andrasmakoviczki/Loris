@@ -12,8 +12,11 @@ import javax.persistence.Id;
 public class User 
 {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private String id;
+	
+	@Column(name="USERNAME")
+	private String username;
 	
 	@Column(name="NAME")
 	private String name;
@@ -35,9 +38,10 @@ public class User
     
     public User(){}
 
-	public User(String id, String name, String email, String password, boolean isEnable, Date lastLogin,
-			Date createDate) {
+	public User(String id, String username, String name, String email, String password, boolean isEnable,
+			Date lastLogin, Date createDate) {
 		this.id = id;
+		this.username = username;
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -48,6 +52,10 @@ public class User
 
 	public String getId() {
 		return id;
+	}
+
+	public String getUsername() {
+		return username;
 	}
 
 	public String getName() {
@@ -76,6 +84,10 @@ public class User
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public void setName(String name) {
@@ -107,6 +119,8 @@ public class User
 		StringBuilder builder = new StringBuilder();
 		builder.append("User [id=");
 		builder.append(id);
+		builder.append(", username=");
+		builder.append(username);
 		builder.append(", name=");
 		builder.append(name);
 		builder.append(", email=");
@@ -121,5 +135,6 @@ public class User
 		builder.append(createDate);
 		builder.append("]");
 		return builder.toString();
-	}    
+	}
+
 }
