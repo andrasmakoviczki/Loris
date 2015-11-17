@@ -1,52 +1,59 @@
 package edu.elte.spring.loris.backend.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "Category", schema = "loris@hbase-pu")
 public class Category {
-		@Id
-		@GeneratedValue(strategy = GenerationType.AUTO)
-		private String id;
 
-		@Column(name = "CATEGORY_NAME")
-		private String categoryName;
+	@Id
+	@GeneratedValue(strategy = GenerationType.TABLE)
+	private String id;
 
-		public Category() {
-		}
+	@Column(name = "CATEGORY_NAME")
+	private String categoryName;
 
-		public Category(String id, String categoryName) {
-			this.id = id;
-			this.categoryName = categoryName;
-		}
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@JoinColumn(name = "ID")
+	private List<FeedEntry> feedEntry;
 
-		public String getId() {
-			return id;
-		}
+	public Category() {
+	}
 
-		public String getCategoryName() {
-			return categoryName;
-		}
+	public String getId() {
+		return id;
+	}
 
-		public void setId(String id) {
-			this.id = id;
-		}
+	public String getCategoryName() {
+		return categoryName;
+	}
 
-		public void setCategoryName(String categoryName) {
-			this.categoryName = categoryName;
-		}
+	public void setId(String id) {
+		this.id = id;
+	}
 
-		@Override
-		public String toString() {
-			StringBuilder builder = new StringBuilder();
-			builder.append("Category [id=");
-			builder.append(id);
-			builder.append(", categoryName=");
-			builder.append(categoryName);
-			builder.append("]");
-			return builder.toString();
-		}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Category [id=");
+		builder.append(id);
+		builder.append(", categoryName=");
+		builder.append(categoryName);
+		return builder.toString();
+	}
 }

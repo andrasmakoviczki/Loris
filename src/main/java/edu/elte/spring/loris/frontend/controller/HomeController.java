@@ -2,9 +2,11 @@ package edu.elte.spring.loris.frontend.controller;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -21,12 +23,17 @@ import com.sun.syndication.io.FeedException;
 
 import edu.elte.spring.loris.backend.entity.Channel;
 import edu.elte.spring.loris.backend.entity.FeedEntry;
+import edu.elte.spring.loris.backend.entity.User;
 import edu.elte.spring.loris.backend.service.ChannelService;
 import edu.elte.spring.loris.backend.service.ChannelServiceImpl;
 import edu.elte.spring.loris.backend.service.FeedEntryService;
 import edu.elte.spring.loris.backend.service.FeedEntryServiceImpl;
+import edu.elte.spring.loris.backend.service.UserService;
+import edu.elte.spring.loris.backend.service.UserServiceImpl;
 import edu.elte.spring.loris.backend.util.ChannelException;
-import edu.elte.spring.loris.frontend.model.ChannelModel;;
+import edu.elte.spring.loris.backend.util.UserException;
+import edu.elte.spring.loris.frontend.model.ChannelModel;
+import edu.elte.spring.loris.frontend.model.UserModel;;
 
 /**
  * Handles requests for the application home page.
@@ -38,10 +45,13 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	// @Autowired
 	private ChannelService channel;
-	private FeedEntryService fe;
+	private FeedEntryService feService;
+	private UserService uService;
 
 	HomeController() {
 		this.channel = new ChannelServiceImpl();
+		this.feService = new FeedEntryServiceImpl();
+		this.uService = new UserServiceImpl();
 	}
 
 	@RequestMapping("/showContentPart")
@@ -49,56 +59,54 @@ public class HomeController {
 	    return "content-part";
 	}
 
+//	@RequestMapping(value = "/", method = RequestMethod.GET)
+//	public String home(Locale locale, Model model) {
+//		logger.info("Welcome home! The client locale is {}.", locale);
+//
+//		Date date = new Date();
+//		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+//
+//		String formattedDate = dateFormat.format(date);
+//
+//		model.addAttribute("serverTime", formattedDate);
+//		//model.addAttribute("fe",fe.listFeedEntry());
+//
+//		return "home";
+//	}
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-
-		String formattedDate = dateFormat.format(date);
-
-		model.addAttribute("serverTime", formattedDate);
-		//model.addAttribute("fe",fe.listFeedEntry());
-
+	public String viewRegistration(Map<String, Object> model) {
+		UserModel user = new UserModel();
+		model.put("user", user);
 		return "home";
 	}
 
-	@ModelAttribute("foo")
-	public ChannelModel prepareChannelModel() {
-		return new ChannelModel();
-	}
-
-	@ModelAttribute("listEntry")
-	public List<FeedEntry> listEntry() {
-		List<FeedEntry> l = new FeedEntryServiceImpl().listFeedEntry();
-		Integer size = l.size();
-		return l;
-	}
-
-	@RequestMapping(value = "/processForm", method = RequestMethod.POST)
-	public String addChannel(@Valid @ModelAttribute(value = "foo") ChannelModel foo, BindingResult result) {
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public String processRegistration(@ModelAttribute("user") @Valid UserModel user, BindingResult result,
+			Map<String, Object> model) {
 
 		if (result.hasErrors()) {
 			return "home";
 		}
+		//TODO
+		// User registered = new User();
+		User u = new User();
+		u.setUsername(user.getUsername());
+		u.setPassword(user.getPassword());
+		u.setEmail(user.getEmail());
 
+		logger.info(user.toString());
 		try {
-			channel.insertChannel(foo.getLink());
-		} catch (IllegalArgumentException | FeedException | IOException e) {
-			result.rejectValue("link", "error.link", "Cannot parse this URL.");
-			return "home";
-		} catch (ChannelException e) {
-			result.rejectValue("link", "error.link", String.format("Channel already exists: %s", foo.getLink()));
-			return "home";
+			uService.createUser(u);
+		} catch (UserException e) {
+			e.printStackTrace();
 		}
-
-		logger.info("Inserted channelService: {}.", foo.getLink());
-
-		for (Channel ch : channel.listChannel()) {
-			logger.info("Inserted channelService: {}.", ch);
-		}
-
-		return "home";
+		return "sign";
 	}
+
+	/*@ModelAttribute("listEntry")
+	public List<FeedEntry> listEntry() {
+		List<FeedEntry> l = new ArrayList<>(); //feService.listFeedEntry();
+		return l;
+	}*/
 }

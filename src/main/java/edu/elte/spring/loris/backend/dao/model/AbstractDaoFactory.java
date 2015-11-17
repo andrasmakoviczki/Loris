@@ -1,4 +1,4 @@
-package edu.elte.spring.loris.backend.dao;
+package edu.elte.spring.loris.backend.dao.model;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

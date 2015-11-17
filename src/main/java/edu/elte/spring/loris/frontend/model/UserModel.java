@@ -1,27 +1,39 @@
 package edu.elte.spring.loris.frontend.model;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.*;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import edu.elte.spring.loris.frontend.util.PasswordMatch;
+
+@PasswordMatch
 public class UserModel {
 	
+	@NotEmpty
+	@Size(min = 4, max = 15, message="too short")
 	private String username;
+	@NotEmpty
 	private String fullname;
+	@NotEmpty
+	@Email
 	private String email;
+	@NotEmpty
+	@Size(min = 6, max = 15, message="too short")
 	private String password;
+	@NotEmpty
+	@Size(min = 6, max = 15, message="too short")
+	private String passwordConfirm;
 	
 	public UserModel() {
 	}
-	
-	public UserModel(String username, String fullname, String email, String password) {
-		this.username = username;
-		this.fullname = fullname;
-		this.email = email;
-		this.password = password;
-	}
 
-	public String getusername() {
+	public String getUsername() {
 		return username;
 	}
 
-	public String getfullname() {
+	public String getFullname() {
 		return fullname;
 	}
 
@@ -33,11 +45,15 @@ public class UserModel {
 		return password;
 	}
 
-	public void setusername(String username) {
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setUsername(String username) {
 		this.username = username;
 	}
 
-	public void setfullname(String fullname) {
+	public void setFullname(String fullname) {
 		this.fullname = fullname;
 	}
 
@@ -49,18 +65,9 @@ public class UserModel {
 		this.password = password;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("UserModel [username=");
-		builder.append(username);
-		builder.append(", fullname=");
-		builder.append(fullname);
-		builder.append(", email=");
-		builder.append(email);
-		builder.append(", password=");
-		builder.append(password);
-		builder.append("]");
-		return builder.toString();
-	}	
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
+
+	
 }

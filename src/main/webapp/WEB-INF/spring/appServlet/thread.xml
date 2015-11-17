@@ -9,37 +9,16 @@
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 
-	<!-- <bean id="miscPool" -->
-	<!-- class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> -->
-	<!-- <property name="corePoolSize" value="5" /> -->
-	<!-- <property name="maxPoolSize" value="10" /> -->
-	<!-- <property name="queueCapacity" value="250" /> -->
-
-	<!-- </bean> -->
-
-	<!-- <int:annotation-config /> -->
-	<!-- <int:publish-subscribe-channel id="bus" /> -->
-	<!-- <int:publish-subscribe-channel id="busAsync" -->
-	<!-- task-executor="miscPool" ignore-failures="true" /> -->
-	<!-- <int:publish-subscribe-channel id="busSync" -->
-	<!-- ignore-failures="true" /> -->
-	<!-- <int:recipient-list-router id="busRouter" -->
-	<!-- input-channel="bus" ignore-send-failures="true" apply-sequence="true"> -->
-	<!-- <int:recipient channel="busAsync" /> -->
-	<!-- <int:recipient channel="busSync" /> -->
-	<!-- </int:recipient-list-router> -->
-	<!-- <int:gateway id="busGateway" service-interface="trash.test.BusGateway" 
-		/> -->
-
 	<task:annotation-driven />
 	<bean id="StreamingChannel" class="edu.elte.spring.loris.backend.util.StreamingChannel" />
+	<bean id="Jobserver" class="edu.elte.spring.loris.backend.util.JobServer" />
 
-<!-- 	<task:scheduled-tasks> -->
-<!-- 		<task:scheduled ref="demoServiceXmlConfig" method="demoServiceMethod"></task:scheduled> -->
-<!-- 	</task:scheduled-tasks> -->
+<!-- <task:scheduled-tasks> -->
+		<!-- <task:scheduled ref="demoServiceXmlConfig" method="demoServiceMethod"></task:scheduled> -->
+		<!-- </task:scheduled-tasks> -->
 
-	<!-- <task:annotation-driven executor="myExecutor" -->
-	<!-- scheduler="myScheduler" /> -->
-	<!-- <task:executor id="myExecutor" pool-size="5" /> -->
-	<!-- <task:scheduler id="myScheduler" pool-size="10" /> -->
+		<!-- <task:annotation-driven executor="myExecutor" -->
+		<!-- scheduler="myScheduler" /> -->
+		<!-- <task:executor id="myExecutor" pool-size="5" /> -->
+		<!-- <task:scheduler id="myScheduler" pool-size="10" /> -->
 </beans>

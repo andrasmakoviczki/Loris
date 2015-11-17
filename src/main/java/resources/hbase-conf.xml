@@ -15,10 +15,22 @@
 					<name>Loris</name>
 					<tables>
 						<table>
+							<name>Category</name>
+						</table>
+						<table>
 							<name>Channel</name>
 						</table>
 						<table>
 							<name>FeedEntry</name>
+						</table>
+						<table>
+							<name>User</name>
+						</table>
+						<table>
+							<name>Topic</name>
+						</table>
+						<table>
+							<name>Subscription</name>
 						</table>
 					</tables>
 				</schema>

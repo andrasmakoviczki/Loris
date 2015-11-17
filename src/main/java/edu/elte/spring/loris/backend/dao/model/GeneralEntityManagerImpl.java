@@ -1,4 +1,4 @@
-package edu.elte.spring.loris.backend.dao;
+package edu.elte.spring.loris.backend.dao.model;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
 
@@ -91,6 +92,7 @@ public class GeneralEntityManagerImpl extends AbstractDaoFactory implements Gene
 	public List<?> findByQuery(String queryString) {
 		log.info(queryString);
 		Query query = em.createQuery(queryString);
+		query.setMaxResults(Integer.MAX_VALUE);
 		List<?> resultList = query.getResultList();
 		return resultList;
 	}
@@ -98,9 +100,18 @@ public class GeneralEntityManagerImpl extends AbstractDaoFactory implements Gene
 	@Override
 	public List<?> findByQuery(String queryString, String paramater, Object parameterValue) {
 		Query query = em.createQuery(queryString);
+		query.setMaxResults(Integer.MAX_VALUE);
 		query.setParameter(paramater, parameterValue);
 		log.info(queryString);
 		List<?> resultList = query.getResultList();
 		return resultList;
+	}
+
+
+	@Override
+	public <T> TypedQuery<T> findByTypedQuery(String queryString, Class<T> entityClazz) {
+		log.info(queryString);
+		TypedQuery<T> results = em.createQuery(queryString,entityClazz);
+		return results;
 	}
 }

@@ -7,72 +7,138 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.elte.spring.loris.backend.dao.GeneralEntityManagerImpl;
+import com.ibm.icu.util.BytesTrie.Iterator;
+
+import edu.elte.spring.loris.backend.dao.FeedEntryDao;
+import edu.elte.spring.loris.backend.dao.FeedEntryDaoImpl;
+import edu.elte.spring.loris.backend.dao.model.GeneralEntityManagerImpl;
+import edu.elte.spring.loris.backend.entity.Channel;
 import edu.elte.spring.loris.backend.entity.FeedEntry;
+import edu.elte.spring.loris.backend.entity.Subscription;
+import edu.elte.spring.loris.backend.entity.Topic;
+import edu.elte.spring.loris.backend.util.ChannelException;
+import edu.elte.spring.loris.backend.util.UserException;
 
 public class FeedEntryServiceImpl implements FeedEntryService {
 
-	private static final Logger logger = LoggerFactory.getLogger(ChannelServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(FeedEntryServiceImpl.class);
 
-	private GeneralEntityManagerImpl em;
+	FeedEntryDao feDao;
+	TopicService tService;
+	SubscriptionService sService;
+	ChannelService cService;
 
 	public FeedEntryServiceImpl() {
-		em = new GeneralEntityManagerImpl("hbase-pu");
-	}
-
-	public GeneralEntityManagerImpl getEm() {
-		return em;
-	}
-
-	public void setEm(GeneralEntityManagerImpl em) {
-		this.em = em;
+		this.feDao = new FeedEntryDaoImpl();
+		this.tService = new TopicServiceImpl();
+		this.sService = new SubscriptionServiceImpl();
+		this.cService = new ChannelServiceImpl();
 	}
 
 	@Override
-	public void insertFeedEntry(FeedEntry fe) {
-		em.insert(fe);
-		logger.info("Channel {} information successfully inserted.", fe);
+	public void createFeedEntry(FeedEntry fe) {
+		feDao.insertFeedEntry(fe);
 	}
 	
 	@Override
 	public void removeFeedEntry() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public FeedEntry findFeedEntry(String id) {
-		FeedEntry fe = em.findById(FeedEntry.class, id);
-		return fe;
+		return feDao.findFeedEntry(id);
 	}
 
 	@Override
 	public List<FeedEntry> listFeedEntry() {
-		List<?> q = em.findByQuery("select fe from FeedEntry fe");
-		
-		List<FeedEntry> fe = new ArrayList<>();
-		for (Object object : q) {
-			if (object instanceof FeedEntry) {
-				fe.add((FeedEntry) object);
-			}
-		}
-		
-		return fe;
+		return feDao.listFeedEntry();
 	}
 
 	@Override
 	public List<FeedEntry> findFeedEntrybyDate(Date date) {
-		String query = new String("select fe from " + FeedEntry.class.getSimpleName() + " fe where fe.link = :d");
-		List<?> q = em.findByQuery(query,"d",date);
+		return null;
+	}
+
+	@Override
+	public FeedEntry getLastFeedEntry() {
+		return feDao.selectLastFeedEntry();
+	}
+
+	@Override
+	public void updateFeedEntry(FeedEntry fe) {
+		FeedEntry feedEntry = feDao.findFeedEntry(fe.getId());
+		feedEntry.setLabeled(fe.getLabeled());
+		feedEntry.setTopic(fe.getTopic());
+		feDao.updateFeedEntry(feedEntry);
+	}
+
+	@Override
+	public List<FeedEntry> findTopic(String feId, Integer topicNumber) {
+		FeedEntry fe = findFeedEntry(feId);
 		
-		List<FeedEntry> fe = new ArrayList<>();
-		for (Object object : q) {
-			if (object instanceof FeedEntry) {
-				fe.add((FeedEntry) object);
+		List<FeedEntry> recommendFeedEntry = new ArrayList<>();
+		List<Topic> topics = fe.getTopic();
+		
+		
+		Integer currentTopicNumber = 0;
+		for (Topic topic : topics) {
+			List<Topic> listedTopics = tService.listTopicbyTopicName(topic.getTopicName());
+			for (Topic t : listedTopics) {
+				if(t.getFeedEntry() != feId){
+					FeedEntry f = findFeedEntry(t.getFeedEntry()); 
+					recommendFeedEntry.add(f);
+					currentTopicNumber = currentTopicNumber + 1;
+				}
+				
+				if(currentTopicNumber == topicNumber){
+					break;
+				}
 			}
 		}
-		
-		return fe;
+
+		return recommendFeedEntry;
 	}
+
+	@Override
+	public List<FeedEntry> findFeedEntrybyChannel(Channel ch) {
+		String tId = ch.getId();
+		List<FeedEntry> feList = feDao.findFeedEntrybyChannel(tId);
+
+		return feList;
+	}
+
+	@Override
+	public List<FeedEntry> findFeedEntrybyUser() throws UserException {
+		
+		List<FeedEntry> a = listFeedEntry2("alma");
+		
+		/*List<Subscription> sList = sService.findSubscriptionbyUser();
+		List<Channel> cList = new ArrayList<>();
+		for (Subscription s : sList) {
+			cList.add(s.getChannel());
+		}
+		
+		
+		List<FeedEntry> feList = new ArrayList<>();
+		
+		Channel t = cService.listChannel().get(0);
+		
+		List<FeedEntry> feList2 = findFeedEntrybyChannel(t);*/
+		//feList.addAll(findFeedEntrybyChannel());
+/*		for (Channel ch : cList) {
+			
+		}*/
+			
+		return a;
+	}
+
+	@Override
+	public List<FeedEntry> listFeedEntry2(String a) {
+		return feDao.listFeedEntry2(a);
+	}
+
+
+
 
 }

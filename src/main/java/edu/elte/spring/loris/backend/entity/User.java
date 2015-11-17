@@ -7,10 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
 
 @Entity
-public class User 
-{
+@Table(name = "User", schema = "loris@hbase-pu")
+public class User {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private String id;
@@ -27,8 +30,8 @@ public class User
 	@Column(name="PASSWORD")
 	private String password;
 	
-	@Column(name="IS_ENABLE")
-	private boolean isEnable;
+	@Column(name="IS_ENABLED")
+	private boolean isEnabledd;
 	
 	@Column(name="LAST_LOGIN")
 	private Date lastLogin;	
@@ -37,18 +40,6 @@ public class User
 	private Date createDate;	    
     
     public User(){}
-
-	public User(String id, String username, String name, String email, String password, boolean isEnable,
-			Date lastLogin, Date createDate) {
-		this.id = id;
-		this.username = username;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.isEnable = isEnable;
-		this.lastLogin = lastLogin;
-		this.createDate = createDate;
-	}
 
 	public String getId() {
 		return id;
@@ -70,8 +61,8 @@ public class User
 		return password;
 	}
 
-	public boolean isEnable() {
-		return isEnable;
+	public boolean isEnabled() {
+		return isEnabledd;
 	}
 
 	public Date getLastLogin() {
@@ -102,8 +93,8 @@ public class User
 		this.password = password;
 	}
 
-	public void setEnable(boolean isEnable) {
-		this.isEnable = isEnable;
+	public void setEnable(boolean isEnabled) {
+		this.isEnabledd = isEnabled;
 	}
 
 	public void setLastLogin(Date lastLogin) {
@@ -127,8 +118,8 @@ public class User
 		builder.append(email);
 		builder.append(", password=");
 		builder.append(password);
-		builder.append(", isEnable=");
-		builder.append(isEnable);
+		builder.append(", isEnabledd=");
+		builder.append(isEnabledd);
 		builder.append(", lastLogin=");
 		builder.append(lastLogin);
 		builder.append(", createDate=");

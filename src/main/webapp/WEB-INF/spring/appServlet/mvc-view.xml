@@ -28,6 +28,7 @@
 		<property name="contentType" value="text/html; charset=UTF-8" />
 	</bean>
 
+
 	<!-- Fragments -->
 	<bean name="content-part" class="org.thymeleaf.spring4.view.ThymeleafView">
 		<property name="templateName" value="index" />

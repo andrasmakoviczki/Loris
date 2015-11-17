@@ -4,8 +4,8 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html" />
-<meta charset="utf-8" />
+<!-- <meta http-equiv="Content-Type" content="text/html" /> -->
+<!-- <meta charset="utf-8" /> -->
 
 <link
 	href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5.css/bootstrap.min.css"
@@ -13,15 +13,13 @@
 	rel="stylesheet" media="screen" />
 
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<!-- <script type="text/javascript" src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js" -->
-<!--         th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script> -->
 
 </head>
 <body>
 
 	<!-- Navbar -->
-	<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="head">
-		<div class="container">
+	<div class="navbar navbar-default navbar-fixed-top navbar-inverse" th:fragment="head">
+<!-- 		<div class="container"> -->
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
 					data-target=".nav-collapse">
@@ -35,12 +33,13 @@
 					<li th:classappend="${page == 'home' ? 'active' : ''}"><a
 						href="#" th:href="@{/}">Home</a></li>
 					<li th:classappend="${page == 'messages' ? 'active' : ''}"><a
-						href="#" th:href="@{/message}">Messages</a></li>
-					<li th:classappend="${page == 'tasks' ? 'active' : ''}"><a
-						href="#" th:href="@{/task}">Tasks</a></li>
+						href="#" th:href="@{/feed}">Feeds</a></li>
+					<li><a href="#" th:href="@{/channels}">Channels</a></li>
+					<li><a href="#" th:href="@{/find}">Keresés</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li th:if="${#authorization.expression('!isAuthenticated()')}"><a href="../sign.html" th:href="@{/sign.html}">Sign in</a></li>
+					<li th:if="${#authorization.expression('!isAuthenticated()')}"><a
+						href="../sign.html" th:href="@{/sign.html}">Sign in</a></li>
 					<li th:if="${#authorization.expression('isAuthenticated()')}">
 						<span class="navbar-text" th:text="${#authentication.name}"></span>
 					</li>
@@ -48,7 +47,7 @@
 						<a th:href="@{/logout}">Logout</a>
 					</li>
 				</ul>
-			</div>
+<!-- 			</div> -->
 			<!--/.nav-collapse -->
 		</div>
 	</div>

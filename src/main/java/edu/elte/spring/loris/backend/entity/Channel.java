@@ -1,24 +1,20 @@
 package edu.elte.spring.loris.backend.entity;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.Table;
 //import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 @Entity
-//@Table(name = "Channel", schema = "loris@hbase-pu")
-public class Channel  {
-	
+@Table(name = "Channel", schema = "loris@hbase-pu")
+public class Channel{
+
 	@Id
 	@TableGenerator(name = "id_gen", allocationSize = 1, initialValue = 1)
     @GeneratedValue(generator = "id_gen", strategy = GenerationType.TABLE)
@@ -35,22 +31,8 @@ public class Channel  {
 	private Date lastUpdate;
 	@Column(name="CREATE_DATE")
 	private Date createDate;
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinColumn(name = "USER")
-	private List<User> user;
-	
-	public Channel() {
-	}
 
-	public Channel(String id, String title, String link, String language, Date publishDate, Date lastUpdate,
-			Date createDate) {
-		this.id = id;
-		this.title = title;
-		this.link = link;
-		this.language = language;
-		this.publishDate = publishDate;
-		this.lastUpdate = lastUpdate;
-		this.createDate = createDate;
+	public Channel() {
 	}
 
 	public String getId() {
@@ -126,8 +108,6 @@ public class Channel  {
 		builder.append(lastUpdate);
 		builder.append(", createDate=");
 		builder.append(createDate);
-		builder.append(", user=");
-		builder.append(user);
 		builder.append("]");
 		return builder.toString();
 	}

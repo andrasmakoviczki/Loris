@@ -9,6 +9,7 @@
 		<class>edu.elte.spring.loris.backend.entity.Channel</class>
 		<class>edu.elte.spring.loris.backend.entity.FeedEntry</class>
 		<class>edu.elte.spring.loris.backend.entity.Category</class>
+		<class>edu.elte.spring.loris.backend.entity.Subscription</class>
 		<properties>
 			<property name="kundera.nodes" value="localhost" />
 			<property name="kundera.port" value="2181" />

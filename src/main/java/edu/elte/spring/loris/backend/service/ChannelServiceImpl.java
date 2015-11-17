@@ -1,7 +1,11 @@
 package edu.elte.spring.loris.backend.service;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,83 +13,94 @@ import org.slf4j.LoggerFactory;
 
 import com.sun.syndication.io.FeedException;
 
-import edu.elte.spring.loris.backend.dao.GeneralEntityManagerImpl;
+import edu.elte.spring.loris.backend.dao.ChannelDao;
+import edu.elte.spring.loris.backend.dao.ChannelDaoImpl;
+import edu.elte.spring.loris.backend.dao.model.GeneralEntityManagerImpl;
 import edu.elte.spring.loris.backend.entity.Channel;
-import edu.elte.spring.loris.backend.rssHandle.rssFeedDownload;
+import edu.elte.spring.loris.backend.entity.FeedEntry;
+import edu.elte.spring.loris.backend.entity.Subscription;
+import edu.elte.spring.loris.backend.entity.Topic;
 import edu.elte.spring.loris.backend.util.ChannelException;
+import edu.elte.spring.loris.backend.util.URLNormailze;
+import edu.elte.spring.loris.backend.util.UserException;
+import edu.elte.spring.loris.backend.util.rssFeedDownload;
 
 public class ChannelServiceImpl implements ChannelService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ChannelServiceImpl.class);
-
-	private GeneralEntityManagerImpl em;
+	ChannelDao chDao;
+	UserService uService;
+	SubscriptionService sService;
+	FeedEntryService feService;
 
 	public ChannelServiceImpl() {
-		em = new GeneralEntityManagerImpl("hbase-pu");
+		this.chDao = new ChannelDaoImpl();
+		this.uService = new UserServiceImpl();
 	}
 
-	public GeneralEntityManagerImpl getEm() {
-		return em;
-	}
-
-	public void setEm(GeneralEntityManagerImpl em) {
-		this.em = em;
-	}
-
-	// TODO: RSS csatornáról kipótolni a hiányzó adatokat
-	public void insertChannel(String channelUrl)
-			throws IllegalArgumentException, FeedException, IOException, ChannelException {
-		// TODO: rendelje felhasználóhoz a csatornát
-		if (!findChannelByLink(channelUrl).isEmpty()) {
+	public void createChannel(String channelUrl)
+			throws IllegalArgumentException, FeedException, IOException, ChannelException, UserException, URISyntaxException {
+		
+		if (!findChannelbyUrl(channelUrl).isEmpty()) {
 			throw new ChannelException(String.format("Channel already exists: %s", channelUrl));
 		}
-		rssFeedDownload r = new rssFeedDownload(channelUrl);
+
 		Channel ch = new Channel();
-		ch.setLink(channelUrl);
+		URLNormailze u = new URLNormailze();
+		
+		URL ul = u.normailze(channelUrl);
+		rssFeedDownload r = new rssFeedDownload(ul);
 		r.ChannelBuild(ch);
-		em.insert(ch);
-		logger.info("Channel {} information successfully inserted.", ch);
+
+		Date createDate = new Date();
+		ch.setCreateDate(createDate);
+		ch.setLink(ul.toString());
+
+		chDao.insertChannel(ch);
+
 	}
 
-	public void removeChannel() {
+	public void removeChannel(String chId) {
+		Channel ch = chDao.findChannel(chId);
+		chDao.removeChannel(ch);
+		/*List<Subscription> sList = sService.findSubscriptionbyChannel(ch);
+
+		if (sList.size() > 1){
+			List<FeedEntry> feList = feService.findFeedEntrybyChannel(ch);
+			for (FeedEntry feedEntry : feList) {
+				//List<Topic> tList =  
+			}
+		}*/
 	}
 
 	public Channel findChannel(String id) {
-		Channel ch = em.findById(Channel.class, id);
-		return ch;
-	}
-
-	public List<Channel> findChannelByLink(String link) {
-		String query = new String("select ch from " + Channel.class.getSimpleName() + " ch where ch.link = :l");
-		List<?> q = em.findByQuery(query, "l", link);
-
-		List<Channel> ch = new ArrayList<>();
-		for (Object object : q) {
-			if (object instanceof Channel) {
-				ch.add((Channel) object);
-			}
-		}
-
-		return ch;
+		return null;
 	}
 
 	@Override
 	public List<Channel> listChannel() {
-		List<?> q = em.findByQuery("select ch from Channel ch");
-
-		List<Channel> ch = new ArrayList<>();
-		for (Object object : q) {
-			if (object instanceof Channel) {
-				ch.add((Channel) object);
-			}
+		List<Channel> cList = chDao.listChannel();
+		if(cList == null){
+			cList = new ArrayList<>();
 		}
-
-		return ch;
+		return cList;
 	}
 
 	@Override
 	public void updateChannel(Channel ch) {
-		em.merge(ch);
-		logger.info("Channel {} information successfully updated.", ch);
+	}
+
+	@Override
+	public List<Channel> findChannelbyUrl(String url) {
+		return chDao.findChannelbyUrl(url);
+	}
+
+	@Override
+	public Channel findFirstChannelbyUrl(String url) throws ChannelException {
+		List<Channel> ch = chDao.findChannelbyUrl(url);
+		if (ch.isEmpty()){
+			throw new ChannelException("Channel not exists: " + url);
+		}
+		return ch.get(0);
 	}
 }

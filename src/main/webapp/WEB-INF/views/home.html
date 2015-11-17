@@ -9,24 +9,17 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
 
-<link
-	href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.5.css/bootstrap.min.css"
-	th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"
-	rel="stylesheet" media="screen" />
-
-<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
-	th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
 <link type="text/css" rel="stylesheet"
-	href="../../resources/css/sidebar.css"
-	data-th-href="@{/resources/css/sidebar.css}" />
+	href="../../resources/css/register.css"
+	data-th-href="@{/resources/css/register.css}" />
 
-<link type="text/css" rel="stylesheet"
-	href="../../resources/css/style.css"
-	data-th-href="@{/resources/css/style.css}" />
-
-<script type="text/javascript" src="../../resources/js/sidebar.js"
-	data-th-src="@{/resources/js/sidebar.js}"></script>
+<script type="text/javascript" src="../../resources/js/register.js"
+	data-th-src="@{/resources/js/register.js}"></script>
+	
+<script type="text/javascript" src="../../resources/js/register.js"
+	data-th-src="@{/resources/js/register.js}"></script>
 
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script
@@ -37,62 +30,88 @@
 <body>
 	<div th:replace="fragments/head :: head">&nbsp;</div>
 
-	<div class="container">
-		<div class="bs-docs-sidebar">
-			<div
-				class="collapse navbar-collapse navbar-right">
-				<ul class="nav nav-list bs-docs-sidenav affix">
-					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">
-							<i class="icon-user"></i>Csatornák <span class="caret"></span>
-					</a>
-						<ul class="dropdown-menu" role="menu">
-							<li role="presentation"><a id="logout" href="#">Sign Out</a></li>
-						</ul></li>
-				</ul>
+<div class="container">
+    	<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="panel panel-login">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-xs-6">
+								<a href="#" class="active" id="register-form-link">Register</a>
+							</div>
+							<div class="col-xs-6">
+								<a href="#" id="login-form-link">Present</a>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								<div id="login-form" style="display: none;">
+									<p>alma</p>
+								</div>
+								
+								<form id="register-form" th:action="@{/register}"
+									th:object="${user}" method="post" role="form"
+									style="display: block;">
+									<div class="form-group">
+										<input type="text" name="username" id="username" tabindex="1"
+											th:field="*{username}" class="form-control"
+											placeholder="Username" value="" />
+										<p th:if="${#fields.hasErrors('username')}"
+											th:errors="*{username}">Incorrect date</p>
+									</div>
+									<div class="form-group">
+
+										<input type="text" name="name" id="name" tabindex="1"
+											th:field="*{fullname}" class="form-control"
+											placeholder="Name" value="" />
+
+										<p th:if="${#fields.hasErrors('fullname')}"
+											th:errors="*{fullname}">Incorrect date</p>
+									</div>
+									<div class="form-group">
+										<input type="email" name="email" id="email" tabindex="1"
+											th:field="*{email}" class="form-control"
+											placeholder="Email Address" value="" />
+
+										<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect
+											date</p>
+									</div>
+									<div class="form-group">
+										<input type="password" name="password" id="password"
+											th:field="*{password}" tabindex="2" class="form-control"
+											placeholder="Password" />
+										<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect
+											date</p>
+									</div>
+									<div class="form-group">
+										<input type="password" name="confirm-password"
+											id="confirm-password" th:field="*{passwordConfirm}"
+											tabindex="2" class="form-control"
+											placeholder="Confirm Password" />
+										<p th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Incorrect
+											date</p>
+									</div>
+
+									Submit
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="register-submit"
+													id="register-submit" tabindex="4"
+													class="form-control btn btn-register" value="Register Now" />
+											</div>
+										</div>
+									</div>
+								</form>
+								
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<p>hello</p>
-		<p th:text="${serverTime}">time</p>
-
-		<form class="navbar-form navbar-left" action="#"
-			th:action="@{/processForm}" th:object="${foo}" method="post">
-			<div class="form-group">
-				<!-- placeholder: szöveg a keresődobozban -->
-				<input type="text" class="form-control" th:field="*{link}"
-					placeholder="Search" />
-			</div>
-			<p th:if="${#fields.hasErrors('link')}" th:errors="*{link}"></p>
-			<button th:text="Submit" type="submit" class="btn btn-default"></button>
-		</form>
-
-		<table class="table table-striped table-bordered table-hover">
-			<thead>
-				<tr>
-					<th class="col-sm-4 text-center">Cím</th>
-					<th class="col-sm-4 text-center">Tartalom</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr data-th-each="l : ${listEntry}">
-					<td data-th-text="${l.title}">1</td>
-					<td data-th-text="${l.content}">Iron Butterfly</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<table>
-			<tbody>
-				<tr>
-					<td>alma</td>
-					<td>korte</td>
-					<td>barack</td>
-				</tr>
-				<tr>
-					<td>árvíztűrőtükörfúrógép</td>
-				</tr>
-			</tbody>
-		</table>
 	</div>
-</body>
-
+	</body>
 </html>

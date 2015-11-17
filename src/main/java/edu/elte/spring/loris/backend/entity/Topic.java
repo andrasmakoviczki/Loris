@@ -5,26 +5,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "Topic", schema = "loris@hbase-pu")
 public class Topic {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private String id;
 
 	@Column(name = "TOPIC_NAME")
 	private String topicName;
 
 	@Column(name = "TOPIC_VALUE")
-	private String topicValue;
+	private Double topicValue;
+
+	@Column(name = "FEEDENTRY_ID")
+	private String feedEntryId;
 
 	public Topic() {
-	}
-
-	public Topic(String id, String topicName, String topicValue) {
-		this.id = id;
-		this.topicName = topicName;
-		this.topicValue = topicValue;
 	}
 
 	public String getId() {
@@ -35,8 +35,12 @@ public class Topic {
 		return topicName;
 	}
 
-	public String getTopicValue() {
+	public Double getTopicValue() {
 		return topicValue;
+	}
+
+	public String getFeedEntry() {
+		return feedEntryId;
 	}
 
 	public void setId(String id) {
@@ -47,8 +51,12 @@ public class Topic {
 		this.topicName = topicName;
 	}
 
-	public void setTopicValue(String topicValue) {
+	public void setTopicValue(Double topicValue) {
 		this.topicValue = topicValue;
+	}
+
+	public void setFeedEntry(String feedEntryId) {
+		this.feedEntryId = feedEntryId;
 	}
 
 	@Override
@@ -60,6 +68,8 @@ public class Topic {
 		builder.append(topicName);
 		builder.append(", topicValue=");
 		builder.append(topicValue);
+		builder.append(", feedEntryId=");
+		builder.append(feedEntryId);
 		builder.append("]");
 		return builder.toString();
 	}

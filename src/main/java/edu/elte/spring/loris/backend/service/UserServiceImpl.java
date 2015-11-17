@@ -5,33 +5,34 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import edu.elte.spring.loris.backend.dao.GeneralEntityManagerImpl;
+import edu.elte.spring.loris.backend.dao.UserDao;
+import edu.elte.spring.loris.backend.dao.UserDaoImpl;
+import edu.elte.spring.loris.backend.dao.model.GeneralEntityManagerImpl;
 import edu.elte.spring.loris.backend.entity.Channel;
 import edu.elte.spring.loris.backend.entity.User;
+import edu.elte.spring.loris.backend.util.ChannelException;
+import edu.elte.spring.loris.backend.util.UserException;
 
 public class UserServiceImpl implements UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ChannelServiceImpl.class);
-
-	private GeneralEntityManagerImpl em;
+	
+	UserDao uDao;
 	
 	public UserServiceImpl() {
-		em = new GeneralEntityManagerImpl("hbase-pu");
-	}
-
-	public GeneralEntityManagerImpl getEm() {
-		return em;
-	}
-
-	public void setEm(GeneralEntityManagerImpl em) {
-		this.em = em;
+		this.uDao = new UserDaoImpl();
 	}
 	
 	@Override
-	public void insertUser(User u) {
-		em.insert(u);
-		logger.info("Channel {} information successfully inserted.", u);
+	public void createUser(User user) throws UserException {
+		
+		if (uDao.findUserbyUsername(user.getUsername()) != null) {
+			throw new UserException("User already exists:" + user.getUsername());
+		}
+		
+		uDao.insertUser(user);
 	}
 
 	@Override
@@ -54,18 +55,30 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findUserbyUsername(String username) {
-		
-		String query = new String("select u from " + User.class.getSimpleName() + " u where u.username=:uname");
-		List<?> q = em.findByQuery(query, "uname", username);
+		return uDao.findUserbyUsername(username);
+	}
 
-		List<User> uList = new ArrayList<>();
-		for (Object object : q) {
-			if (object instanceof User) {
-				uList.add((User) object);
-			}
+	@Override
+	public User getCurrentUser() throws UserException {
+		Object u = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		String username = new String();
+		if (u instanceof String) {
+			username = (String) u;
+		}
+		else if(u instanceof org.springframework.security.core.userdetails.User){
+			username = ((org.springframework.security.core.userdetails.User) u).getUsername();
 		}
 		
-		return uList.get(0);
+		User user = findUserbyUsername(username);
+		
+		if (user == null) {
+			throw new UserException("No such user: " + username);
+		}
+		
+		logger.info("CurrentUser: ",user.toString());
+		return user;
 	}
+
 
 }
