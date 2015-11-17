@@ -13,12 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "FeedEntry", schema = "loris@hbase-pu")
-public class FeedEntry  {
-
+// @Table(name = "FeedEntry", schema = "loris@hbase-pu")
+public class FeedEntry {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
@@ -27,24 +25,24 @@ public class FeedEntry  {
 	private String content;
 	@Column(name = "TITLE")
 	private String title;
-	@Column(name = "LINK")
-	private String link;
 	@Column(name = "PUBLISH_DATE")
 	private Date publishDate;
 	@Column(name = "CREATE_DATE")
 	private Date createDate;
 	@Column(name = "LABELED")
 	private Boolean labeled;
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID")
-	private List<Category> category;
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID")
-	private List<Topic> topic;
+	@Column(name = "LINK")
+	private String link;
 	
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID")
+	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@JoinColumn(name = "CHANNEL")
 	private Channel channel;
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@JoinColumn(name = "TOPIC")
+	private List<Topic> topic;
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@JoinColumn(name = "CATEGORY")
+	private List<Category> category;
 
 	public FeedEntry() {
 	}
@@ -69,16 +67,20 @@ public class FeedEntry  {
 		return createDate;
 	}
 
-	public List<Category> getCategory() {
-		return category;
+	public Boolean getLabeled() {
+		return labeled;
+	}
+
+	public Channel getChannel() {
+		return channel;
 	}
 
 	public List<Topic> getTopic() {
 		return topic;
 	}
 
-	public Channel getChannel() {
-		return channel;
+	public List<Category> getCategory() {
+		return category;
 	}
 
 	public void setId(String id) {
@@ -101,24 +103,20 @@ public class FeedEntry  {
 		this.createDate = createDate;
 	}
 
-	public void setCategory(List<Category> category) {
-		this.category = category;
-	}
-
-	public void setTopic(List<Topic> topic) {
-		this.topic = topic;
+	public void setLabeled(Boolean labeled) {
+		this.labeled = labeled;
 	}
 
 	public void setChannel(Channel channel) {
 		this.channel = channel;
 	}
 
-	public Boolean getLabeled() {
-		return labeled;
+	public void setTopic(List<Topic> topic) {
+		this.topic = topic;
 	}
 
-	public void setLabeled(Boolean labeled) {
-		this.labeled = labeled;
+	public void setCategory(List<Category> category) {
+		this.category = category;
 	}
 
 	@Override
@@ -130,20 +128,18 @@ public class FeedEntry  {
 		builder.append(content);
 		builder.append(", title=");
 		builder.append(title);
-		builder.append(", link=");
-		builder.append(link);
 		builder.append(", publishDate=");
 		builder.append(publishDate);
 		builder.append(", createDate=");
 		builder.append(createDate);
 		builder.append(", labeled=");
 		builder.append(labeled);
-		builder.append(", category=");
-		builder.append(category);
-		builder.append(", topic=");
-		builder.append(topic);
 		builder.append(", channel=");
 		builder.append(channel);
+		builder.append(", topic=");
+		builder.append(topic);
+		builder.append(", category=");
+		builder.append(category);
 		builder.append("]");
 		return builder.toString();
 	}
