@@ -17,9 +17,9 @@
 		<!-- <intercept-url pattern="/errors/**" access="permitAll" /> -->
 		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
 		<!-- <access-denied-handler error-page="/errors/403" /> -->
- 		<form-login login-page="/sign" login-processing-url="/sign" 
- 			username-parameter="username" password-parameter="password" 
- 			authentication-failure-url="/" default-target-url="/" /> 
+		<form-login login-page="/sign" login-processing-url="/sign"
+			username-parameter="username" password-parameter="password"
+			authentication-failure-url="/" default-target-url="/" />
 		<!-- <logout logout-url="/logout" logout-success-url="/login/form?logout" 
 			/> -->
 		<csrf disabled="true" />

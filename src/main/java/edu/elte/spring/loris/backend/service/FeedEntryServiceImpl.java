@@ -7,16 +7,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ibm.icu.util.BytesTrie.Iterator;
-
 import edu.elte.spring.loris.backend.dao.FeedEntryDao;
 import edu.elte.spring.loris.backend.dao.FeedEntryDaoImpl;
-import edu.elte.spring.loris.backend.dao.model.GeneralEntityManagerImpl;
 import edu.elte.spring.loris.backend.entity.Channel;
 import edu.elte.spring.loris.backend.entity.FeedEntry;
 import edu.elte.spring.loris.backend.entity.Subscription;
 import edu.elte.spring.loris.backend.entity.Topic;
-import edu.elte.spring.loris.backend.util.ChannelException;
 import edu.elte.spring.loris.backend.util.UserException;
 
 public class FeedEntryServiceImpl implements FeedEntryService {
@@ -41,8 +37,8 @@ public class FeedEntryServiceImpl implements FeedEntryService {
 	}
 	
 	@Override
-	public void removeFeedEntry() {
-
+	public void removeFeedEntry(FeedEntry fe) {
+		feDao.removeFeedEntry(fe);
 	}
 
 	@Override
@@ -102,43 +98,24 @@ public class FeedEntryServiceImpl implements FeedEntryService {
 
 	@Override
 	public List<FeedEntry> findFeedEntrybyChannel(Channel ch) {
-		String tId = ch.getId();
-		List<FeedEntry> feList = feDao.findFeedEntrybyChannel(tId);
-
-		return feList;
+		return feDao.findFeedEntrybyChannel(ch);
 	}
 
 	@Override
-	public List<FeedEntry> findFeedEntrybyUser() throws UserException {
+	public List<List<FeedEntry>> findFeedEntrybyUser() throws UserException {
 		
-		List<FeedEntry> a = listFeedEntry2("alma");
-		
-		/*List<Subscription> sList = sService.findSubscriptionbyUser();
+		List<Subscription> sList = sService.findSubscriptionbyCurrentUser();
 		List<Channel> cList = new ArrayList<>();
 		for (Subscription s : sList) {
 			cList.add(s.getChannel());
 		}
-		
-		
-		List<FeedEntry> feList = new ArrayList<>();
-		
-		Channel t = cService.listChannel().get(0);
-		
-		List<FeedEntry> feList2 = findFeedEntrybyChannel(t);*/
-		//feList.addAll(findFeedEntrybyChannel());
-/*		for (Channel ch : cList) {
 			
-		}*/
+		List<List<FeedEntry>> feList = new ArrayList<>();
+				
+		for (Channel ch : cList) {
+			feList.add(findFeedEntrybyChannel(ch));
+		}
 			
-		return a;
+		return feList;
 	}
-
-	@Override
-	public List<FeedEntry> listFeedEntry2(String a) {
-		return feDao.listFeedEntry2(a);
-	}
-
-
-
-
 }

@@ -1,11 +1,5 @@
 package edu.elte.spring.loris.frontend.controller;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -13,16 +7,11 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.sun.syndication.io.FeedException;
-
-import edu.elte.spring.loris.backend.entity.Channel;
-import edu.elte.spring.loris.backend.entity.FeedEntry;
 import edu.elte.spring.loris.backend.entity.User;
 import edu.elte.spring.loris.backend.service.ChannelService;
 import edu.elte.spring.loris.backend.service.ChannelServiceImpl;
@@ -30,9 +19,7 @@ import edu.elte.spring.loris.backend.service.FeedEntryService;
 import edu.elte.spring.loris.backend.service.FeedEntryServiceImpl;
 import edu.elte.spring.loris.backend.service.UserService;
 import edu.elte.spring.loris.backend.service.UserServiceImpl;
-import edu.elte.spring.loris.backend.util.ChannelException;
 import edu.elte.spring.loris.backend.util.UserException;
-import edu.elte.spring.loris.frontend.model.ChannelModel;
 import edu.elte.spring.loris.frontend.model.UserModel;;
 
 /**

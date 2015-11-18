@@ -3,7 +3,6 @@ package edu.elte.spring.loris.backend.dao.model;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 public interface GeneralEntityManager {

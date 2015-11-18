@@ -1,8 +1,8 @@
 package edu.elte.spring.loris.frontend.model;
 
-import java.util.Date;
-
-import org.hibernate.validator.constraints.*;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 
 public class ChannelModel   {
 	

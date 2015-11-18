@@ -1,5 +1,6 @@
 package edu.elte.spring.loris.backend.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,11 +12,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "Category", schema = "loris@hbase-pu")
-public class Category {
+public class Category implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4526623595253624186L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
@@ -23,6 +27,8 @@ public class Category {
 
 	@Column(name = "CATEGORY_NAME")
 	private String categoryName;
+	@Column(name = "FEEDENTRY_ID")
+	private String feedEntryId;
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID")
@@ -54,6 +60,27 @@ public class Category {
 		builder.append(id);
 		builder.append(", categoryName=");
 		builder.append(categoryName);
+		builder.append(", feedEntryId=");
+		builder.append(feedEntryId);
+		builder.append(", feedEntry=");
+		builder.append(feedEntry);
+		builder.append("]");
 		return builder.toString();
+	}
+
+	public String getFeedEntryId() {
+		return feedEntryId;
+	}
+
+	public void setFeedEntryId(String feedEntryId) {
+		this.feedEntryId = feedEntryId;
+	}
+
+	public List<FeedEntry> getFeedEntry() {
+		return feedEntry;
+	}
+
+	public void setFeedEntry(List<FeedEntry> feedEntry) {
+		this.feedEntry = feedEntry;
 	}
 }

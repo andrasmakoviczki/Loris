@@ -1,15 +1,20 @@
 package edu.elte.spring.loris.backend.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "Topic", schema = "loris@hbase-pu")
-public class Topic {
+public class Topic implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7625389095191812618L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)

@@ -1,7 +1,5 @@
 package edu.elte.spring.loris.backend.security;
 
-import java.util.List;
-
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +10,6 @@ import com.google.common.collect.Sets;
 import edu.elte.spring.loris.backend.entity.User;
 import edu.elte.spring.loris.backend.service.UserService;
 import edu.elte.spring.loris.backend.service.UserServiceImpl;
-import edu.elte.spring.loris.backend.util.UserException;
 
 public class CustomUserDetailsService implements UserDetailsService{
 	

@@ -1,5 +1,6 @@
 package edu.elte.spring.loris.backend.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -7,12 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
 
 @Entity
-@Table(name = "User", schema = "loris@hbase-pu")
-public class User {
+public class User implements Serializable
+{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5528166007550894011L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
@@ -30,8 +33,8 @@ public class User {
 	@Column(name="PASSWORD")
 	private String password;
 	
-	@Column(name="IS_ENABLED")
-	private boolean isEnabledd;
+	@Column(name="IS_ENABLE")
+	private boolean isEnable;
 	
 	@Column(name="LAST_LOGIN")
 	private Date lastLogin;	
@@ -40,6 +43,18 @@ public class User {
 	private Date createDate;	    
     
     public User(){}
+
+	public User(String id, String username, String name, String email, String password, boolean isEnable,
+			Date lastLogin, Date createDate) {
+		this.id = id;
+		this.username = username;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.isEnable = isEnable;
+		this.lastLogin = lastLogin;
+		this.createDate = createDate;
+	}
 
 	public String getId() {
 		return id;
@@ -61,8 +76,8 @@ public class User {
 		return password;
 	}
 
-	public boolean isEnabled() {
-		return isEnabledd;
+	public boolean isEnable() {
+		return isEnable;
 	}
 
 	public Date getLastLogin() {
@@ -93,8 +108,8 @@ public class User {
 		this.password = password;
 	}
 
-	public void setEnable(boolean isEnabled) {
-		this.isEnabledd = isEnabled;
+	public void setEnable(boolean isEnable) {
+		this.isEnable = isEnable;
 	}
 
 	public void setLastLogin(Date lastLogin) {
@@ -118,8 +133,8 @@ public class User {
 		builder.append(email);
 		builder.append(", password=");
 		builder.append(password);
-		builder.append(", isEnabledd=");
-		builder.append(isEnabledd);
+		builder.append(", isEnable=");
+		builder.append(isEnable);
 		builder.append(", lastLogin=");
 		builder.append(lastLogin);
 		builder.append(", createDate=");

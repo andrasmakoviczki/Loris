@@ -2,7 +2,6 @@ package edu.elte.spring.loris.frontend.model;
 
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 

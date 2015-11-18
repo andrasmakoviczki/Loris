@@ -1,5 +1,6 @@
 package edu.elte.spring.loris.backend.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -16,8 +17,12 @@ import javax.persistence.OneToMany;
 
 @Entity
 // @Table(name = "FeedEntry", schema = "loris@hbase-pu")
-public class FeedEntry {
+public class FeedEntry implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1047859559427007452L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private String id;
@@ -33,6 +38,8 @@ public class FeedEntry {
 	private Boolean labeled;
 	@Column(name = "LINK")
 	private String link;
+	@Column(name = "CHANNEL_ID")
+	private String channelId;
 	
 	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "CHANNEL")
@@ -134,6 +141,10 @@ public class FeedEntry {
 		builder.append(createDate);
 		builder.append(", labeled=");
 		builder.append(labeled);
+		builder.append(", link=");
+		builder.append(link);
+		builder.append(", channelId=");
+		builder.append(channelId);
 		builder.append(", channel=");
 		builder.append(channel);
 		builder.append(", topic=");
@@ -150,5 +161,13 @@ public class FeedEntry {
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	public String getChannelId() {
+		return channelId;
+	}
+
+	public void setChannelId(String channelId) {
+		this.channelId = channelId;
 	}
 }

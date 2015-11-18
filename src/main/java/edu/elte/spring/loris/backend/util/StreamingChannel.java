@@ -65,6 +65,7 @@ public class StreamingChannel {
 						
 						fe.setCreateDate(new Date());
 						fe.setChannel(ch);
+						fe.setChannelId(ch.getId());
 						fe.setLabeled(false);
 						
 						for (Category category : fe.getCategory()) {

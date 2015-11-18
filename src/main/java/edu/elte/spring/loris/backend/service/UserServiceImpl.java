@@ -1,6 +1,5 @@
 package edu.elte.spring.loris.backend.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,10 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import edu.elte.spring.loris.backend.dao.UserDao;
 import edu.elte.spring.loris.backend.dao.UserDaoImpl;
-import edu.elte.spring.loris.backend.dao.model.GeneralEntityManagerImpl;
-import edu.elte.spring.loris.backend.entity.Channel;
 import edu.elte.spring.loris.backend.entity.User;
-import edu.elte.spring.loris.backend.util.ChannelException;
 import edu.elte.spring.loris.backend.util.UserException;
 
 public class UserServiceImpl implements UserService {

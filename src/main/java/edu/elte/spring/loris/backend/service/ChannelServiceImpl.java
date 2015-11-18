@@ -1,10 +1,8 @@
 package edu.elte.spring.loris.backend.service;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,11 +13,8 @@ import com.sun.syndication.io.FeedException;
 
 import edu.elte.spring.loris.backend.dao.ChannelDao;
 import edu.elte.spring.loris.backend.dao.ChannelDaoImpl;
-import edu.elte.spring.loris.backend.dao.model.GeneralEntityManagerImpl;
 import edu.elte.spring.loris.backend.entity.Channel;
-import edu.elte.spring.loris.backend.entity.FeedEntry;
-import edu.elte.spring.loris.backend.entity.Subscription;
-import edu.elte.spring.loris.backend.entity.Topic;
+import edu.elte.spring.loris.backend.entity.User;
 import edu.elte.spring.loris.backend.util.ChannelException;
 import edu.elte.spring.loris.backend.util.URLNormailze;
 import edu.elte.spring.loris.backend.util.UserException;
@@ -32,10 +27,15 @@ public class ChannelServiceImpl implements ChannelService {
 	UserService uService;
 	SubscriptionService sService;
 	FeedEntryService feService;
+	CategoryService caService;
+	TopicService tService;
 
 	public ChannelServiceImpl() {
 		this.chDao = new ChannelDaoImpl();
 		this.uService = new UserServiceImpl();
+		this.sService = new SubscriptionServiceImpl();
+		this.caService = new CategoryServiceImpl();
+		this.tService = new TopicServiceImpl();
 	}
 
 	public void createChannel(String channelUrl)
@@ -60,17 +60,33 @@ public class ChannelServiceImpl implements ChannelService {
 
 	}
 
-	public void removeChannel(String chId) {
-		Channel ch = chDao.findChannel(chId);
+	public void removeChannel(String chId) throws UserException {
+		/*Channel ch = chDao.findChannel(chId);
 		chDao.removeChannel(ch);
-		/*List<Subscription> sList = sService.findSubscriptionbyChannel(ch);
-
-		if (sList.size() > 1){
-			List<FeedEntry> feList = feService.findFeedEntrybyChannel(ch);
-			for (FeedEntry feedEntry : feList) {
-				//List<Topic> tList =  
+		
+		List<Subscription> sList = sService.findSubscriptionbyCurrentUser();
+		
+		if(sList.size() > 1){
+			for (Subscription subscription : sList) {
+				if(subscription.getChannel().equals(ch)){
+					sService.removeSubscription(subscription);
+				}
 			}
+		} else if (sList.size() == 1){
+			List<FeedEntry> feList = feService.findFeedEntrybyChannel(ch);
+			for (FeedEntry fe : feList) {
+				for (Category ca : fe.getCategory()) {
+					caService.removeCategory(ca);
+				}
+				for (Topic t : fe.getTopic()) {
+					tService.removeTopic(t);
+				}
+				feService.removeFeedEntry(fe);
+			}
+			sService.removeSubscription(sList.get(0));
+			chDao.removeChannel(ch);
 		}*/
+		
 	}
 
 	public Channel findChannel(String id) {
@@ -80,9 +96,8 @@ public class ChannelServiceImpl implements ChannelService {
 	@Override
 	public List<Channel> listChannel() {
 		List<Channel> cList = chDao.listChannel();
-		if(cList == null){
-			cList = new ArrayList<>();
-		}
+		
+		
 		return cList;
 	}
 
@@ -102,5 +117,13 @@ public class ChannelServiceImpl implements ChannelService {
 			throw new ChannelException("Channel not exists: " + url);
 		}
 		return ch.get(0);
+	}
+
+	@Override
+	public List<Channel> findChannelbyCurrentUser() throws UserException {
+		User u = uService.getCurrentUser();
+
+		
+		return null;
 	}
 }
