@@ -16,8 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-// @Table(name = "FeedEntry", schema = "loris@hbase-pu")
-public class FeedEntry implements Serializable{
+public class FeedEntry implements Serializable,Comparable<FeedEntry>{
 
 	/**
 	 * 
@@ -41,13 +40,13 @@ public class FeedEntry implements Serializable{
 	@Column(name = "CHANNEL_ID")
 	private String channelId;
 	
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@ManyToOne(cascade =  CascadeType.ALL , fetch = FetchType.EAGER)
 	@JoinColumn(name = "CHANNEL")
 	private Channel channel;
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@OneToMany(cascade =  CascadeType.ALL , fetch = FetchType.EAGER)
 	@JoinColumn(name = "TOPIC")
 	private List<Topic> topic;
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@OneToMany(cascade =  CascadeType.ALL , fetch = FetchType.EAGER)
 	@JoinColumn(name = "CATEGORY")
 	private List<Category> category;
 
@@ -169,5 +168,16 @@ public class FeedEntry implements Serializable{
 
 	public void setChannelId(String channelId) {
 		this.channelId = channelId;
+	}
+
+	@Override
+	public int compareTo(FeedEntry o) {
+		if(publishDate == null){
+			publishDate = new Date();
+		}
+		if(o.getPublishDate() == null){
+			o.setPublishDate(new Date());
+		}
+		return o.getPublishDate().compareTo(publishDate);
 	}
 }

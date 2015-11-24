@@ -3,9 +3,13 @@ package edu.elte.spring.loris.backend.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.elte.spring.loris.backend.dao.FeedEntryDao;
 import edu.elte.spring.loris.backend.dao.FeedEntryDaoImpl;
@@ -15,30 +19,24 @@ import edu.elte.spring.loris.backend.entity.Subscription;
 import edu.elte.spring.loris.backend.entity.Topic;
 import edu.elte.spring.loris.backend.util.UserException;
 
+@Service
 public class FeedEntryServiceImpl implements FeedEntryService {
 
 	private static final Logger logger = LoggerFactory.getLogger(FeedEntryServiceImpl.class);
 
-	FeedEntryDao feDao;
+	@Autowired
+	FeedEntryDaoImpl feDao;
+	@Autowired
 	TopicService tService;
-	SubscriptionService sService;
-	ChannelService cService;
-
-	public FeedEntryServiceImpl() {
-		this.feDao = new FeedEntryDaoImpl();
-		this.tService = new TopicServiceImpl();
-		this.sService = new SubscriptionServiceImpl();
-		this.cService = new ChannelServiceImpl();
-	}
 
 	@Override
 	public void createFeedEntry(FeedEntry fe) {
-		feDao.insertFeedEntry(fe);
+		feDao.insert(fe);
 	}
-	
+
 	@Override
 	public void removeFeedEntry(FeedEntry fe) {
-		feDao.removeFeedEntry(fe);
+		feDao.remove(fe);
 	}
 
 	@Override
@@ -47,18 +45,18 @@ public class FeedEntryServiceImpl implements FeedEntryService {
 	}
 
 	@Override
-	public List<FeedEntry> listFeedEntry() {
+	public Set<FeedEntry> listFeedEntry() {
 		return feDao.listFeedEntry();
 	}
 
 	@Override
-	public List<FeedEntry> findFeedEntrybyDate(Date date) {
+	public Set<FeedEntry> findFeedEntrybyDate(Date date) {
 		return null;
 	}
 
 	@Override
-	public FeedEntry getLastFeedEntry() {
-		return feDao.selectLastFeedEntry();
+	public FeedEntry getLastFeedEntrybyChannel(Channel ch) {
+		return feDao.selectLastFeedEntryByChannel(ch);
 	}
 
 	@Override
@@ -66,28 +64,28 @@ public class FeedEntryServiceImpl implements FeedEntryService {
 		FeedEntry feedEntry = feDao.findFeedEntry(fe.getId());
 		feedEntry.setLabeled(fe.getLabeled());
 		feedEntry.setTopic(fe.getTopic());
-		feDao.updateFeedEntry(feedEntry);
+		feDao.merge(feedEntry);
 	}
 
 	@Override
-	public List<FeedEntry> findTopic(String feId, Integer topicNumber) {
+	public Set<FeedEntry> findTopic(String feId, Integer topicNumber) {
 		FeedEntry fe = findFeedEntry(feId);
-		
-		List<FeedEntry> recommendFeedEntry = new ArrayList<>();
+
+		Set<FeedEntry> recommendFeedEntry = new TreeSet<>();
 		List<Topic> topics = fe.getTopic();
-		
-		
+
 		Integer currentTopicNumber = 0;
 		for (Topic topic : topics) {
 			List<Topic> listedTopics = tService.listTopicbyTopicName(topic.getTopicName());
 			for (Topic t : listedTopics) {
-				if(t.getFeedEntry() != feId){
-					FeedEntry f = findFeedEntry(t.getFeedEntry()); 
+				// t.getFeedEntry()
+				if (t.getFeedEntry() != feId) {
+					FeedEntry f = findFeedEntry(t.getFeedEntry());
 					recommendFeedEntry.add(f);
 					currentTopicNumber = currentTopicNumber + 1;
 				}
-				
-				if(currentTopicNumber == topicNumber){
+
+				if (currentTopicNumber == topicNumber) {
 					break;
 				}
 			}
@@ -97,25 +95,33 @@ public class FeedEntryServiceImpl implements FeedEntryService {
 	}
 
 	@Override
-	public List<FeedEntry> findFeedEntrybyChannel(Channel ch) {
+	public Set<FeedEntry> findFeedEntrybyChannel(Channel ch) {
 		return feDao.findFeedEntrybyChannel(ch);
 	}
 
 	@Override
-	public List<List<FeedEntry>> findFeedEntrybyUser() throws UserException {
-		
-		List<Subscription> sList = sService.findSubscriptionbyCurrentUser();
-		List<Channel> cList = new ArrayList<>();
-		for (Subscription s : sList) {
-			cList.add(s.getChannel());
-		}
-			
-		List<List<FeedEntry>> feList = new ArrayList<>();
-				
-		for (Channel ch : cList) {
-			feList.add(findFeedEntrybyChannel(ch));
-		}
-			
-		return feList;
+	public List<Set<FeedEntry>> findFeedEntrybyUser() throws UserException {
+
+		/*
+		 * List<Subscription> sList = sService.findSubscriptionbyCurrentUser();
+		 * List<Channel> cList = new ArrayList<>(); for (Subscription s : sList)
+		 * { cList.add(s.getChannel()); }
+		 * 
+		 * List<Set<FeedEntry>> feList = new ArrayList<>();
+		 * 
+		 * for (Channel ch : cList) { feList.add(findFeedEntrybyChannel(ch)); }
+		 */
+
+		return null;
+	}
+
+	@Override
+	public Set<FeedEntry> listbyChannelAfterRegistration(Channel ch, Date registrationDate) {
+		return feDao.listbyChannelAfterRegistration(ch,registrationDate);
+	}
+
+	@Override
+	public Set<FeedEntry> findbyChannelAfterRegistration(Channel ch, Date registrationDate, String term) {
+		return feDao.findbyChannelAfterRegistration(ch,registrationDate,term);
 	}
 }

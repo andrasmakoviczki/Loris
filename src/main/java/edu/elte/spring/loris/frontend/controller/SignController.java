@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,16 +18,17 @@ import edu.elte.spring.loris.backend.service.UserService;
 import edu.elte.spring.loris.backend.service.UserServiceImpl;
 import edu.elte.spring.loris.backend.util.UserException;
 import edu.elte.spring.loris.frontend.model.UserModel;
+import trash.GetService;
 
 @Controller
 public class SignController {
 
 	private static final Logger logger = LoggerFactory.getLogger(SignController.class);
 
+	@Autowired
 	UserService uService;
 
 	public SignController() {
-		uService = new UserServiceImpl();
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)

@@ -4,56 +4,36 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import edu.elte.spring.loris.backend.dao.model.GeneralEntityManagerImpl;
 import edu.elte.spring.loris.backend.entity.Channel;
 import edu.elte.spring.loris.backend.entity.FeedEntry;
 
-public class FeedEntryDaoImpl implements FeedEntryDao {
+@Repository
+public class FeedEntryDaoImpl extends GeneralEntityManagerImpl<FeedEntry> implements FeedEntryDao {
 
 	private static final Logger logger = LoggerFactory.getLogger(FeedEntryDaoImpl.class);
 
-	private GeneralEntityManagerImpl em;
-
-	public FeedEntryDaoImpl() {
-		em = new GeneralEntityManagerImpl("hbase-pu");
-	}
-
-	public GeneralEntityManagerImpl getEm() {
-		return em;
-	}
-
-	public void setEm(GeneralEntityManagerImpl em) {
-		this.em = em;
-	}
-
-	@Override
-	public void insertFeedEntry(FeedEntry fe) {
-		em.insert(fe);
-		logger.info("FeedEntry {} information successfully inserted.", fe);
-	}
-
-	@Override
-	public void removeFeedEntry(FeedEntry fe) {
-		em.remove(fe);
-		logger.info("FeedEntry {} information successfully removed.", fe);
-	}
-
 	@Override
 	public FeedEntry findFeedEntry(String id) {
-		FeedEntry fe = em.findById(FeedEntry.class, id);
+		FeedEntry fe = findById(FeedEntry.class, id);
 		return fe;
 	}
 
 	@Override
-	public List<FeedEntry> listFeedEntry() {
-		List<?> q = em.findByQuery("select fe from FeedEntry fe");
+	public Set<FeedEntry> listFeedEntry() {
+		List<?> q = findByQuery("select fe from FeedEntry fe");
 
-		List<FeedEntry> fe = new ArrayList<>();
+		Set<FeedEntry> fe = new TreeSet<>();
 		for (Object object : q) {
 			if (object instanceof FeedEntry) {
 				fe.add((FeedEntry) object);
@@ -64,11 +44,11 @@ public class FeedEntryDaoImpl implements FeedEntryDao {
 	}
 
 	@Override
-	public List<FeedEntry> findFeedEntrybyDate(Date date) {
+	public Set<FeedEntry> findFeedEntrybyDate(Date date) {
 		String query = new String("select fe from " + FeedEntry.class.getSimpleName() + " fe where fe.link = :d");
-		List<?> q = em.findByQuery(query, "d", date);
+		List<?> q = findByQuery(query, "d", date);
 
-		List<FeedEntry> fe = new ArrayList<>();
+		Set<FeedEntry> fe = new TreeSet<>();
 		for (Object object : q) {
 			if (object instanceof FeedEntry) {
 				fe.add((FeedEntry) object);
@@ -79,48 +59,49 @@ public class FeedEntryDaoImpl implements FeedEntryDao {
 	}
 
 	@Override
-	public FeedEntry selectLastFeedEntry() {
+	public FeedEntry selectLastFeedEntryByChannel(Channel ch) {
 
-		String query = "select fe from FeedEntry fe";
+		String query = new String("select fe from FeedEntry fe where fe.channelId=:ch");
+		List<?> q = findByQuery(query, "ch", ch.getId());
 
-		List<FeedEntry> results = em.findByTypedQuery(query, FeedEntry.class).getResultList();
+		Set<FeedEntry> feList = new TreeSet<>();
+		for (Object object : q) {
+			if (object instanceof FeedEntry) {
+				FeedEntry fe = (FeedEntry) object;
+				feList.add(fe);
+			}
+		}
 
-		if (results.isEmpty()) {
+		if (feList.isEmpty()) {
 			return null;
 		}
 
-		FeedEntry last = Collections.max(results, new Comparator<FeedEntry>() {
+		FeedEntry last = Collections.min(feList);/*, new Comparator<FeedEntry>() {
 			@Override
 			public int compare(FeedEntry o1, FeedEntry o2) {
 				return o1.getPublishDate().compareTo(o2.getPublishDate());
 			}
-		});
+		});*/
 
 		return last;
 	}
 
 	@Override
-	public void updateFeedEntry(FeedEntry fe) {
-		em.merge(fe);
-		logger.info("FeedEntry {} information successfully updated.", fe);
-	}
-
-	@Override
-	public List<FeedEntry> findFeedEntrybyChannel(Channel ch) {
+	public Set<FeedEntry> findFeedEntrybyChannel(Channel ch) {
 		String query = new String("select fe from FeedEntry fe where fe.channelId=:ch");
-		List<?> q = em.findByQuery(query,"ch",ch.getId());
-		
-		//List<?> q = em.findByQuery("select fe from FeedEntry fe");
+		List<?> q = findByQuery(query, "ch", ch.getId());
 
-		List<FeedEntry> feList = new ArrayList<>();
+		// List<?> q = em.findByQuery("select fe from FeedEntry fe");
+
+		Set<FeedEntry> feList = new TreeSet<>();
 		String chId = ch.getId();
 		for (Object object : q) {
 			if (object instanceof FeedEntry) {
 				FeedEntry fe = (FeedEntry) object;
-				//String feCh = fe.getChannel().getId();
-				//if(chId.equals(feCh)){
-					feList.add(fe);
-				//}				
+				// String feCh = fe.getChannel().getId();
+				// if(chId.equals(feCh)){
+				feList.add(fe);
+				// }
 			}
 		}
 
@@ -128,17 +109,40 @@ public class FeedEntryDaoImpl implements FeedEntryDao {
 	}
 
 	@Override
-	public List<FeedEntry> listFeedEntry2(String a) {
-		List<?> q = em.findByQuery("select fe from FeedEntry fe");
-
-		List<FeedEntry> fe = new ArrayList<>();
+	public Set<FeedEntry> listbyChannelAfterRegistration(Channel ch,Date registrationDate) {
+		String query = new String("select fe from FeedEntry fe where fe.channelId = :id and fe.createDate >= :d");
+		Map<String,Object> parameters = new HashMap<>();
+		parameters.put("id", ch.getId());
+		parameters.put("d", registrationDate);
+		List<?> q = findByQuery(query, parameters);
+		
+		Set<FeedEntry> fe = new TreeSet<>();
 		for (Object object : q) {
 			if (object instanceof FeedEntry) {
 				fe.add((FeedEntry) object);
 			}
 		}
-
 		return fe;
 	}
 
+	@Override
+	public Set<FeedEntry> findbyChannelAfterRegistration(Channel ch, Date registrationDate, String term) {
+		String query = new String("select fe from FeedEntry fe where fe.channelId = :id and fe.createDate >= :d");
+		Map<String,Object> parameters = new HashMap<>();
+		parameters.put("id", ch.getId());
+		parameters.put("d", registrationDate);
+		List<?> q = findByQuery(query, parameters);
+				
+		String searchTerm = term.toLowerCase();
+		Set<FeedEntry> feList = new TreeSet<>();
+		for (Object object : q) {
+			if (object instanceof FeedEntry) {
+				FeedEntry fe = (FeedEntry) object;
+				if((fe.getContent() != null && fe.getContent().toLowerCase().contains(searchTerm)) || (fe.getTitle() != null && fe.getTitle().toLowerCase().contains(searchTerm))){
+					feList.add((FeedEntry) object);
+				}
+			}
+		}
+		return feList;
+	}
 }

@@ -2,26 +2,31 @@ package edu.elte.spring.loris.backend.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import edu.elte.spring.loris.backend.dao.TopicDao;
 import edu.elte.spring.loris.backend.dao.TopicDaoImpl;
 import edu.elte.spring.loris.backend.entity.Topic;
 
+@Service
 public class TopicServiceImpl implements TopicService {
 
-	TopicDao tDao;
+
+	@Autowired
+	TopicDaoImpl tDao;
 
 	public TopicServiceImpl() {
-		this.tDao = new TopicDaoImpl();
 	}
 
 	@Override
 	public void createTopic(Topic t) {
-		tDao.insertTopic(t);
+		tDao.insert(t);
 	}
 
 	@Override
 	public void removeTopic(Topic t) {
-		tDao.removeTopic(t);
+		tDao.remove(t);
 	}
 
 	@Override

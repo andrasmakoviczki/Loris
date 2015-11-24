@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.springframework.org/schema/security">
+
+<head th:include="fragments/head :: head">
+<script src="https://code.jfeedMapuery.com/jfeedMapuery-2.1.4.min.js"></script>
+</head>
+<body>
+
+	<div id="navbarfragment" th:include="fragments/navbar :: navbar"></div>
+	<div class="container">
+	
+	<button onclick="searchTopic('1')">Try it</button>
+		<div id="text"></div>
+	
+		<section id="top">
+			<h1 th:text="#{news.title}" class="page-header">News</h1>
+		</section>
+
+		<div class="col-md-12">
+			<button id="pageReload" onclick="refresh()"
+				class="btn btn-info btn-lg" th:text="#{news.refresh}">Refresh
+				this page</button>
+		</div>
+
+		<!-- Search field -->
+		<section id="search">
+			<h2 th:text="#{news.search}" class="col-md-12">Search</h2>
+			<form class="navbar-form navbar-left" action="#"
+				th:action="@{/news/find}" th:object="${searchModel}" method="get">
+				<div id="custom-search-input">
+					<div class="input-group col-md-12">
+						<input type="text" class="form-control input-lg"
+							th:placeholder="#{news.searchText}" th:field="*{term}" /> <span
+							class="input-group-btn">
+							<button class="btn btn-info btn-lg" type="submit">
+								<i class="glyphicon glyphicon-search"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+			</form>
+
+		</section>
+
+		<!-- news -->
+		<div class="col-md-9">
+			<!-- 		<h2 th:text="#{news.fresh}">Fresh news</h2> -->
+			<div class="panel-group" id="accordion">
+				<div th:each="feedMap,iterStat : ${feList}">
+					<div th:if="${iterStat.count != 0}">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion"
+										th:href="'#' + ch + ${feedMap.key.id}"
+										th:text="${feedMap.key.title}">Channel title</a>
+								</h4>
+							</div>
+
+							<div th:id="ch + ${feedMap.key.id}"
+								class="panel-collapse collapse">
+								<div th:each="fe : ${feedMap.value}">
+									<div th:id="entry + ${fe.id}" class="panel-body">
+
+										<button type="button" class="btn btn-info btn-block"
+											data-toggle="collapse" th:attr="data-target='#'+${fe.id}"
+											th:onclick="'searchTopic(\'' + ${fe.id} + '\');'">
+											<strong th:name="${fe.id}" th:text="${fe.title}"></strong>
+										</button>
+
+										<div th:attr="id=${fe.id}"
+											class="collapse well container-fluid">
+											<p
+												th:text="${#calendars.format(fe.publishDate,'yyyy. MMMM dd. HH:mm')}">0000.00.00
+												00:00</p>
+
+											<div th:each="ca : ${fe.category}" style="display: inline">
+												<span th:text="${ca.categoryName}" class="badge">category</span>
+											</div>
+
+											<p th:text="${fe.content}" class="jumbotron text-justify"></p>
+											<p th:text="#{news.forward}">Forward to site:</p>
+											<a th:attr="href=${fe.link}" th:text="${fe.link}"> </a>
+											<p th:text="#{news.same}">Same news:</p>
+
+											<div th:id="same1"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<section id="bottom"></section>
+		</div>
+
+		<!-- Sidemenu -->
+		<div class="col-md-3 scrollspy">
+			<div class="panel-default " data-spy="affix">
+				<div class="panel-heading" th:text="#{news.sidemenu}">Side
+					menu</div>
+				<div class="panel-body">
+					<ul class="nav hidden-xs hidden-sm">
+						<li><a href="#top" th:text="#{news.top}">Top</a></li>
+						<li><a href="#search" th:text="#{news.search}">Top</a></li>
+					</ul>
+					<div th:each="fe : ${feList}" class="nav">
+						<ul class="nav hidden-xs hidden-sm" id="nav">
+							<li class="nav"><a th:attr="href='#' + ch + ${fe.key.id}"
+								th:text="${fe.key.title}"> </a></li>
+						</ul>
+					</div>
+					<ul class="nav hidden-xs hidden-sm" id="nav">
+						<li><a href="#bottom" th:text="#{news.bottom}">Bottom</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

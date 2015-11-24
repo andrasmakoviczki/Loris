@@ -30,7 +30,7 @@ public class Category implements Serializable{
 	@Column(name = "FEEDENTRY_ID")
 	private String feedEntryId;
 
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@OneToMany(cascade =  CascadeType.ALL , fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID")
 	private List<FeedEntry> feedEntry;
 

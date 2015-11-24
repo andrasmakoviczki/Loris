@@ -1,34 +1,43 @@
 package edu.elte.spring.loris.backend.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import edu.elte.spring.loris.backend.dao.UserDao;
 import edu.elte.spring.loris.backend.dao.UserDaoImpl;
 import edu.elte.spring.loris.backend.entity.User;
 import edu.elte.spring.loris.backend.util.UserException;
 
+@Service
 public class UserServiceImpl implements UserService {
-
 	private static final Logger logger = LoggerFactory.getLogger(ChannelServiceImpl.class);
 	
-	UserDao uDao;
-	
-	public UserServiceImpl() {
-		this.uDao = new UserDaoImpl();
-	}
+	@Autowired
+	UserDaoImpl userDao;
 	
 	@Override
 	public void createUser(User user) throws UserException {
 		
-		if (uDao.findUserbyUsername(user.getUsername()) != null) {
+		if (userDao.findUserbyUsername(user.getUsername()) != null) {
 			throw new UserException("User already exists:" + user.getUsername());
 		}
 		
-		uDao.insertUser(user);
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		
+		user.setPassword(passwordEncoder.encode(user.getPassword()));		
+		user.setCreateDate(new Date());
+		user.setLastLogin(new Date());
+		user.setEnable(true);
+		
+		userDao.insert(user);
 	}
 
 	@Override
@@ -51,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findUserbyUsername(String username) {
-		return uDao.findUserbyUsername(username);
+		return userDao.findUserbyUsername(username);
 	}
 
 	@Override

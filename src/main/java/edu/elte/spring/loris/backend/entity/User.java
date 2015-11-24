@@ -44,18 +44,6 @@ public class User implements Serializable
     
     public User(){}
 
-	public User(String id, String username, String name, String email, String password, boolean isEnable,
-			Date lastLogin, Date createDate) {
-		this.id = id;
-		this.username = username;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.isEnable = isEnable;
-		this.lastLogin = lastLogin;
-		this.createDate = createDate;
-	}
-
 	public String getId() {
 		return id;
 	}

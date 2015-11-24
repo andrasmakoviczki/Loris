@@ -1,12 +1,17 @@
 package edu.elte.spring.loris.frontend.controller;
 
+import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +25,8 @@ import edu.elte.spring.loris.backend.service.FeedEntryServiceImpl;
 import edu.elte.spring.loris.backend.service.UserService;
 import edu.elte.spring.loris.backend.service.UserServiceImpl;
 import edu.elte.spring.loris.backend.util.UserException;
-import edu.elte.spring.loris.frontend.model.UserModel;;
+import edu.elte.spring.loris.frontend.model.UserModel;
+import trash.GetService;;
 
 /**
  * Handles requests for the application home page.
@@ -30,37 +36,30 @@ import edu.elte.spring.loris.frontend.model.UserModel;;
 public class HomeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	// @Autowired
-	private ChannelService channel;
-	private FeedEntryService feService;
+
+	@Autowired
 	private UserService uService;
 
 	HomeController() {
-		this.channel = new ChannelServiceImpl();
-		this.feService = new FeedEntryServiceImpl();
 		this.uService = new UserServiceImpl();
 	}
 
-	@RequestMapping("/showContentPart")
-	public String showContentPart() {
-	    return "content-part";
-	}
+	// @RequestMapping(value = "/", method = RequestMethod.GET)
+	// public String home(Locale locale, Model model) {
+	// logger.info("Welcome home! The client locale is {}.", locale);
+	//
+	// Date date = new Date();
+	// DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
+	// DateFormat.LONG, locale);
+	//
+	// String formattedDate = dateFormat.format(date);
+	//
+	// model.addAttribute("serverTime", formattedDate);
+	// //model.addAttribute("fe",fe.listFeedEntry());
+	//
+	// return "home";
+	// }
 
-//	@RequestMapping(value = "/", method = RequestMethod.GET)
-//	public String home(Locale locale, Model model) {
-//		logger.info("Welcome home! The client locale is {}.", locale);
-//
-//		Date date = new Date();
-//		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-//
-//		String formattedDate = dateFormat.format(date);
-//
-//		model.addAttribute("serverTime", formattedDate);
-//		//model.addAttribute("fe",fe.listFeedEntry());
-//
-//		return "home";
-//	}
-	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String viewRegistration(Map<String, Object> model) {
 		UserModel user = new UserModel();
@@ -75,12 +74,13 @@ public class HomeController {
 		if (result.hasErrors()) {
 			return "home";
 		}
-		//TODO
+		// TODO
 		// User registered = new User();
 		User u = new User();
 		u.setUsername(user.getUsername());
 		u.setPassword(user.getPassword());
 		u.setEmail(user.getEmail());
+		u.setName(user.getFullname());
 
 		logger.info(user.toString());
 		try {
@@ -91,9 +91,9 @@ public class HomeController {
 		return "sign";
 	}
 
-	/*@ModelAttribute("listEntry")
-	public List<FeedEntry> listEntry() {
-		List<FeedEntry> l = new ArrayList<>(); //feService.listFeedEntry();
-		return l;
-	}*/
+	/*
+	 * @ModelAttribute("listEntry") public List<FeedEntry> listEntry() {
+	 * List<FeedEntry> l = new ArrayList<>(); //feService.listFeedEntry();
+	 * return l; }
+	 */
 }

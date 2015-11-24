@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.sun.syndication.io.FeedException;
 
@@ -20,51 +22,29 @@ import edu.elte.spring.loris.backend.util.URLNormailze;
 import edu.elte.spring.loris.backend.util.UserException;
 import edu.elte.spring.loris.backend.util.rssFeedDownload;
 
+@Service
 public class ChannelServiceImpl implements ChannelService {
 
+
 	private static final Logger logger = LoggerFactory.getLogger(ChannelServiceImpl.class);
-	ChannelDao chDao;
-	UserService uService;
-	SubscriptionService sService;
-	FeedEntryService feService;
-	CategoryService caService;
-	TopicService tService;
+	
+	@Autowired
+	ChannelDaoImpl chDao;
 
 	public ChannelServiceImpl() {
-		this.chDao = new ChannelDaoImpl();
-		this.uService = new UserServiceImpl();
-		this.sService = new SubscriptionServiceImpl();
-		this.caService = new CategoryServiceImpl();
-		this.tService = new TopicServiceImpl();
 	}
 
 	public void createChannel(String channelUrl)
 			throws IllegalArgumentException, FeedException, IOException, ChannelException, UserException, URISyntaxException {
-		
-		if (!findChannelbyUrl(channelUrl).isEmpty()) {
-			throw new ChannelException(String.format("Channel already exists: %s", channelUrl));
-		}
-
 		Channel ch = new Channel();
-		URLNormailze u = new URLNormailze();
-		
-		URL ul = u.normailze(channelUrl);
-		rssFeedDownload r = new rssFeedDownload(ul);
-		r.ChannelBuild(ch);
-
-		Date createDate = new Date();
-		ch.setCreateDate(createDate);
-		ch.setLink(ul.toString());
-
-		chDao.insertChannel(ch);
-
+		chDao.insert(ch);
 	}
 
-	public void removeChannel(String chId) throws UserException {
-		/*Channel ch = chDao.findChannel(chId);
-		chDao.removeChannel(ch);
+	public void removeChannel(String chId) {
+		Channel ch = chDao.findChannel(chId);
+		chDao.remove(ch);
 		
-		List<Subscription> sList = sService.findSubscriptionbyCurrentUser();
+		/*List<Subscription> sList = sService.findSubscriptionbyCurrentUser();
 		
 		if(sList.size() > 1){
 			for (Subscription subscription : sList) {
@@ -90,7 +70,7 @@ public class ChannelServiceImpl implements ChannelService {
 	}
 
 	public Channel findChannel(String id) {
-		return null;
+		return chDao.findChannel(id);
 	}
 
 	@Override
@@ -119,11 +99,17 @@ public class ChannelServiceImpl implements ChannelService {
 		return ch.get(0);
 	}
 
-	@Override
-	public List<Channel> findChannelbyCurrentUser() throws UserException {
-		User u = uService.getCurrentUser();
 
-		
-		return null;
+
+	@Override
+	public void createChannel(Channel ch) {
+		chDao.insert(ch);		
 	}
+
+	@Override
+	public void removeChannel(Channel ch) {
+		chDao.remove(ch);		
+	}
+
+
 }

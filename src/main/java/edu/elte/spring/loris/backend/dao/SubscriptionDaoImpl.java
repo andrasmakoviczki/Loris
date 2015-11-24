@@ -7,49 +7,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.elte.spring.loris.backend.dao.model.GeneralEntityManagerImpl;
+import edu.elte.spring.loris.backend.entity.Category;
 import edu.elte.spring.loris.backend.entity.Channel;
 import edu.elte.spring.loris.backend.entity.Subscription;
 import edu.elte.spring.loris.backend.entity.User;
+import org.springframework.stereotype.Repository;
 
-public class SubscriptionDaoImpl implements SubscriptionDao {
+@Repository
+public class SubscriptionDaoImpl extends GeneralEntityManagerImpl<Subscription> implements SubscriptionDao {
 
 	private static final Logger logger = LoggerFactory.getLogger(SubscriptionDaoImpl.class);
 
-	private GeneralEntityManagerImpl em;
-
-	public SubscriptionDaoImpl() {
-		em = new GeneralEntityManagerImpl("hbase-pu");
-	}
-
-	public GeneralEntityManagerImpl getEm() {
-		return em;
-	}
-
-	public void setEm(GeneralEntityManagerImpl em) {
-		this.em = em;
-	}
-
-	@Override
-	public void insertSubscription(Subscription s) {
-		em.insert(s);
-		logger.info("Subscrption {} information successfully inserted.", s);
-	}
-
-	@Override
-	public void removeSubscription(Subscription s) {
-		em.remove(s);
-		logger.info("Subscription {} information successfully removed.", s);
-	}
-
 	@Override
 	public Subscription findSubscription(String id) {
-		Subscription s = em.findById(Subscription.class, id);
+		Subscription s = findById(Subscription.class, id);
 		return s;
 	}
 
 	@Override
 	public List<Subscription> listSubscription() {
-		List<?> q = em.findByQuery("select s from Subscription s");
+		List<?> q = findByQuery("select s from Subscription s");
 
 		List<Subscription> s = new ArrayList<>();
 		for (Object object : q) {
@@ -62,42 +39,63 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
 	}
 
 	@Override
-	public void updateSubscription(Subscription s) {
-		em.merge(s);
-		logger.info("Subscription {} information successfully updated.", s);
-	}
-
-	@Override
-	public List<Subscription> findSubscriptionbyChannel(Channel ch) {
-		String query = new String("select s from Subscription s where s.channel=:ch");
-		List<?> q = em.findByQuery(query, "ch", ch);
-
-		List<Subscription> sList = new ArrayList<>();
-		for (Object object : q) {
-			if (object instanceof Subscription) {
-				sList.add((Subscription) object);
-			}
-		}
-		
-		return sList;
-	}
-
-	@Override
-	public List<Subscription> findSubscriptionbyUser(User u) {
+	public List<Subscription> listSubscriptionbyChannel(Channel ch) {
 		String query = new String("select s from Subscription s");
-		List<?> q = em.findByQuery(query);
+		List<?> q = findByQuery(query);
 
 		List<Subscription> sList = new ArrayList<>();
 		for (Object object : q) {
 			if (object instanceof Subscription) {
 				Subscription s = (Subscription) object;
-				if(s.getUser().getId().equals(u.getId())){
+				if (s.getChannel().getId().equals(ch.getId())) {
 					sList.add(s);
 				}
 			}
 		}
-		
+
 		return sList;
 	}
+
+	@Override
+	public List<Subscription> listSubscriptionbyUser(User u) {
+		String query = new String("select s from Subscription s");
+		List<?> q = findByQuery(query);
+
+		List<Subscription> sList = new ArrayList<>();
+		for (Object object : q) {
+			if (object instanceof Subscription) {
+				Subscription s = (Subscription) object;
+				if (s.getUser().getId().equals(u.getId())) {
+					sList.add(s);
+				}
+			}
+		}
+
+		return sList;
+	}
+	
+		@Override
+		public Subscription getSubscriptionbyChannelandUser(Channel ch, User u) {
+		String query = new String("select s from Subscription s");
+		List<?> q = findByQuery(query);
+
+		List<Subscription> sList = new ArrayList<>();	
+		
+		for (Object object : q) {
+			if (object instanceof Subscription) {
+				Subscription s = (Subscription) object;
+				if (s.getUser().getId().equals(u.getId()) && s.getChannel().getId().equals(ch.getId())) {
+					sList.add(s);
+				}
+			}
+		}
+
+		if(sList.size() != 1){
+			return null;
+		}
+		
+		return sList.get(0);
+	}
+
 
 }

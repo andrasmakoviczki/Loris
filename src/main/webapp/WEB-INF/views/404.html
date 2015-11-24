@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.springframework.org/schema/security">
+<head>
+<meta http-equiv="Content-Type" content="text/html" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+
+<link data-th-href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"
+	type="text/css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/resources/css/style.css}" />
+
+<script th:src="@{https://code.jquery.com/jquery-2.1.4.min.js}"></script>
+<script
+	th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+
+<title th:text="#{loris.title}">Loris</title>
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="error-template">
+							<h1 th:text="#{404.title}">404 - Not Found</h1>
+
+							<div class="error-actions well well-lg">
+								<p th:text="#{404.message}">Sorry, the requested resource
+									could not be found.</p>
+								<a  href="javascript:history.go(-1);"
+									class="btn btn-default btn-lg"><span th:text="#{404.back}"
+									class="glyphicon glyphicon-circle-arrow-left" ></span>
+									</a> <a  href="/loris/"
+									class="btn btn-success btn-lg"><span th:text="#{404.home}"
+									class="glyphicon glyphicon-dashboard"></span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

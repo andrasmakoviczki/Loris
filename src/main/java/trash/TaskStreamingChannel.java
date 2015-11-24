@@ -1,4 +1,4 @@
-package edu.elte.spring.loris.backend.util;
+package trash;
 
 public class TaskStreamingChannel implements Runnable{
 

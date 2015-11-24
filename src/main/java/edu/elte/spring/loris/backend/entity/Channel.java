@@ -20,8 +20,7 @@ public class Channel implements Serializable{
 	private static final long serialVersionUID = -67196401224889676L;
 	
 	@Id
-	@TableGenerator(name = "id_gen", allocationSize = 1, initialValue = 1)
-    @GeneratedValue(generator = "id_gen", strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
 	private String id;
 	@Column(name="TITLE")
 	private String title;
@@ -31,7 +30,7 @@ public class Channel implements Serializable{
 	private String language;
 	@Column(name="PUBLISH_DATE")
 	private Date publishDate;
-	@Column(name="LASTUP_DATE")
+	@Column(name="LAST_UPDATE")
 	private Date lastUpdate;
 	@Column(name="CREATE_DATE")
 	private Date createDate;

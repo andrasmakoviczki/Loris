@@ -2,28 +2,32 @@ package edu.elte.spring.loris.backend.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import edu.elte.spring.loris.backend.dao.CategoryDao;
 import edu.elte.spring.loris.backend.dao.CategoryDaoImpl;
 import edu.elte.spring.loris.backend.entity.Category;
 
+@Service
 public class CategoryServiceImpl implements CategoryService {
 
-	CategoryDao caDao;
+	@Autowired
+	CategoryDaoImpl caDao;
 	
 	public CategoryServiceImpl() {
-		this.caDao = new CategoryDaoImpl();
 	}
 
 	@Override
 	public void createCategory(Category ca) {	
 		if (caDao.findbyCategoryName(ca.getCategoryName()) == null) {
-			caDao.insertCategory(ca);
+			caDao.insert(ca);
 		}	
 	}
 
 	@Override
 	public void removeCategory(Category ca) {
-		caDao.removeCategory(ca);
+		caDao.remove(ca);
 	}
 
 	@Override

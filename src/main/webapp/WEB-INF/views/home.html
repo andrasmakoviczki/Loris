@@ -4,43 +4,25 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.springframework.org/schema/security">
 
-<head>
-<meta http-equiv="Content-Type" content="text/html" />
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width" />
-
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-
-<link type="text/css" rel="stylesheet"
-	href="../../resources/css/register.css"
-	data-th-href="@{/resources/css/register.css}" />
-
-<script type="text/javascript" src="../../resources/js/register.js"
-	data-th-src="@{/resources/js/register.js}"></script>
-
-<script type="text/javascript" src="../../resources/js/register.js"
-	data-th-src="@{/resources/js/register.js}"></script>
-
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-<title>Loris</title>
-</head>
+<head th:include="fragments/head :: head"></head>
 <body>
-	<div th:replace="fragments/head :: head">&nbsp;</div>
+
+	<div id="navbarfragment" th:include="fragments/navbar :: navbar"></div>
 
 	<div class="container">
+		<h1 th:text="#{home.welcome}" class="text-center page-header">Welcome to
+			Loris!</h1>
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-login">
 					<div class="panel-heading">
 						<div class="row">
 							<div class="col-xs-6">
-								<a href="#" class="active" id="register-form-link">Register</a>
+								<a href="#" class="active" id="register-form-link"
+									th:text="#{home.register}">Register</a>
 							</div>
 							<div class="col-xs-6">
-								<a href="#" id="login-form-link">Present</a>
+								<a href="#" id="login-form-link" th:text="#{home.present}">Present</a>
 							</div>
 						</div>
 					</div>
@@ -57,7 +39,7 @@
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1"
 											th:field="*{username}" class="form-control"
-											placeholder="Username" value="" />
+											th:placeholder="#{home.username}" value="" />
 										<p th:if="${#fields.hasErrors('username')}"
 											th:errors="*{username}">Incorrect date</p>
 									</div>
@@ -65,7 +47,7 @@
 
 										<input type="text" name="name" id="name" tabindex="1"
 											th:field="*{fullname}" class="form-control"
-											placeholder="Name" value="" />
+											th:placeholder="#{home.name}" value="" />
 
 										<p th:if="${#fields.hasErrors('fullname')}"
 											th:errors="*{fullname}">Incorrect date</p>
@@ -73,7 +55,7 @@
 									<div class="form-group">
 										<input type="email" name="email" id="email" tabindex="1"
 											th:field="*{email}" class="form-control"
-											placeholder="Email Address" value="" />
+											th:placeholder="#{home.email}" value="" />
 
 										<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect
 											date</p>
@@ -81,7 +63,7 @@
 									<div class="form-group">
 										<input type="password" name="password" id="password"
 											th:field="*{password}" tabindex="2" class="form-control"
-											placeholder="Password" />
+											th:placeholder="#{home.password}" placeholder="Password" />
 										<p th:if="${#fields.hasErrors('password')}"
 											th:errors="*{password}">Incorrect date</p>
 									</div>
@@ -89,18 +71,18 @@
 										<input type="password" name="confirm-password"
 											id="confirm-password" th:field="*{passwordConfirm}"
 											tabindex="2" class="form-control"
-											placeholder="Confirm Password" />
+											th:placeholder="#{home.confirmpassword}" />
 										<p th:if="${#fields.hasErrors('passwordConfirm')}"
 											th:errors="*{passwordConfirm}">Incorrect date</p>
 									</div>
 
-									Submit
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
 												<input type="submit" name="register-submit"
 													id="register-submit" tabindex="4"
-													class="form-control btn btn-register" value="Register Now" />
+													class="form-control btn btn-register"
+													th:value="#{home.registernow}" />
 											</div>
 										</div>
 									</div>
