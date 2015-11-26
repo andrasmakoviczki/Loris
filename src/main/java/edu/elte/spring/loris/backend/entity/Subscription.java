@@ -1,7 +1,6 @@
 package edu.elte.spring.loris.backend.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,19 +13,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-
 public class Subscription implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7664300682700673603L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private String id;
 	
-	@Column(name = "LAST_ACCESS")
-	private Date lastAccess;
 	@ManyToOne(cascade =  CascadeType.ALL , fetch = FetchType.EAGER)
 	@JoinColumn(name = "USER_ID")
 	private User user;

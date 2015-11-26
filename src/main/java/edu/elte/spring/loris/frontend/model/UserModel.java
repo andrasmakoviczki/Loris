@@ -7,11 +7,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import edu.elte.spring.loris.frontend.util.PasswordMatch;
 
-@PasswordMatch
+@PasswordMatch(message="alma")
 public class UserModel {
 	
 	@NotEmpty
-	@Size(min = 4, max = 15, message="too short")
+	@Size(min = 4, max = 16)
 	private String username;
 	@NotEmpty
 	private String fullname;
@@ -19,10 +19,10 @@ public class UserModel {
 	@Email
 	private String email;
 	@NotEmpty
-	@Size(min = 6, max = 15, message="too short")
+	@Size(min = 6, max = 16)
 	private String password;
 	@NotEmpty
-	@Size(min = 6, max = 15, message="too short")
+	@Size(min = 6, max = 16)
 	private String passwordConfirm;
 	
 	public UserModel() {
@@ -67,6 +67,5 @@ public class UserModel {
 	public void setPasswordConfirm(String passwordConfirm) {
 		this.passwordConfirm = passwordConfirm;
 	}
-
 	
 }

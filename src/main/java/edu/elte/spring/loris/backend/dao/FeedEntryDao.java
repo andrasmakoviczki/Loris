@@ -3,17 +3,28 @@ package edu.elte.spring.loris.backend.dao;
 import java.util.Date;
 import java.util.Set;
 
-import edu.elte.spring.loris.backend.dao.model.GeneralEntityManager;
-import edu.elte.spring.loris.backend.entity.Category;
 import edu.elte.spring.loris.backend.entity.Channel;
 import edu.elte.spring.loris.backend.entity.FeedEntry;
 
-public interface FeedEntryDao{
-	public FeedEntry findFeedEntry(String id);
-	public FeedEntry selectLastFeedEntryByChannel(Channel ch);
-	public Set<FeedEntry> findFeedEntrybyDate(Date date);
-	public Set<FeedEntry> findFeedEntrybyChannel(Channel ch);
+public interface FeedEntryDao {
+	// Category id alapján
+	public FeedEntry getFeedEntry(String id);
+
+	// Legutolsó FeedEntry bejegyzés visszaadása channel alapján
+	public FeedEntry getLastFeedEntryByChannel(Channel ch);
+
+	// FeedEntry listázása
 	public Set<FeedEntry> listFeedEntry();
-	public Set<FeedEntry> listbyChannelAfterRegistration(Channel ch,Date registrationDate);
-	public Set<FeedEntry> findbyChannelAfterRegistration(Channel ch,Date registrationDate,String term);
+
+	// FeedEntry listázása dátum alapján
+	public Set<FeedEntry> findFeedEntrybyDate(Date date);
+
+	// FeedEntry listázása channel alapján
+	public Set<FeedEntry> findFeedEntrybyChannel(Channel ch);
+
+	// FeedEntry listázása chanel és regisztráció időpontja
+	public Set<FeedEntry> listbyChannelAfterRegistration(Channel ch, Date registrationDate);
+
+	// FeedEntry keresése chanel és regisztráció időpontja alapján
+	public Set<FeedEntry> findbyChannelAfterRegistration(Channel ch, Date registrationDate, String term);
 }

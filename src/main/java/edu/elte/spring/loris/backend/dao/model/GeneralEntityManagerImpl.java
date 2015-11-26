@@ -1,133 +1,116 @@
 package edu.elte.spring.loris.backend.dao.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
-import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.log4j.Logger;
-import org.hamcrest.core.IsInstanceOf;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class GeneralEntityManagerImpl<T> extends AbstractDaoFactory implements GeneralEntityManager<T> {
-	
-	static Integer counter = 0;
-	static Logger log = Logger.getLogger(GeneralEntityManagerImpl.class);
+public abstract class GeneralEntityManagerImpl<T> implements GeneralEntityManager<T> {
+
+	private static final Logger logger = LoggerFactory.getLogger(GeneralEntityManagerImpl.class);
 	
 	@PersistenceContext (unitName="hbase-pu", type=PersistenceContextType.EXTENDED)
 	protected EntityManager em;
-	private Class<T> type;
 
-	@Override
 	public EntityManager getEntityManager() {
 		return em;
 	}
 
-	@Override
 	public void closeEntityManager() {
 		if (em != null) {
 			em.close();
 		}
 	}
 
-	@Override
 	public void clearEntityManager() {
 		if (em != null) {
 			em.clear();
 		}
 	}
 
-	@Override
 	public void shutDown() {
 		if (em != null) {
 			em.close();
 		}
 	}
 
-	@Override
 	public void insert(T entity) {
+		logger.debug("INSERT: " + entity);
 		em.persist(entity);
 		em.clear();
 	}
 
-	@Override
 	public void merge(T entity) {
+		logger.debug("UPDATE: " + entity);
 		em.merge(entity);
 		em.clear();
 	}
 
-	@Override
 	public void remove(T entity) {
+		logger.debug("REMOVE: " + entity);
 		em.remove(entity);
 		em.clear();
 	}
 
-	@Override
-	public T findById(Class<T> entityClazz, Object id) {
+	protected T findById(Class<T> entityClazz, Object id) {
 		T results = em.find(entityClazz, id);
 		return results;
 	}
 
-	@Override
-	public List<?> findByQuery(String queryString) {
-		log.info(queryString);
+	protected List<?> findByQuery(String queryString) {
+		logger.debug(queryString);
 		Query query = em.createQuery(queryString);
 		query.setMaxResults(Integer.MAX_VALUE);
 		List<?> r = query.getResultList();
 		return r;
 	}
 
-	@Override
-	public TypedQuery<T> findByTypedQuery(String queryString, Class<T> entityClazz) {
-		log.info(queryString);
+	protected TypedQuery<T> findByTypedQuery(String queryString, Class<T> entityClazz) {
+		logger.debug(queryString);
 		TypedQuery<T> results = em.createQuery(queryString,entityClazz);
 		return results;
 	}
 
-	@Override
-	public List<?> findByQuery(String queryString, Map<String, Object> parameters) {
+	protected List<?> findByQuery(String queryString, Map<String, Object> parameters) {
 		return findByQuery(queryString,parameters,Integer.MAX_VALUE);
 	}
 	
-	@Override
-	public List<?> findByQuery(String queryString, String paramater, Object parameterValue,Integer maxResult) {
+	protected List<?> findByQuery(String queryString, String paramater, Object parameterValue,Integer maxResult) {
 		Map<String,Object> parameters = new HashMap<>();
 		parameters.put(paramater, parameterValue);
 		return findByQuery(queryString,parameters,maxResult);
 	}
 	
-	@Override
-	public List<?> findByQuery(String queryString, String paramater, Object parameterValue) {
+	protected List<?> findByQuery(String queryString, String paramater, Object parameterValue) {
 		Map<String,Object> parameters = new HashMap<>();
 		parameters.put(paramater, parameterValue);
 		return findByQuery(queryString,parameters, Integer.MAX_VALUE);
 	}
 
-	@Override
-	public List<?> findByQuery(String queryString, Map<String, Object> parameters, Integer maxResult) {
+	protected List<?> findByQuery(String queryString, Map<String, Object> parameters, Integer maxResult) {
+		logger.debug(queryString);
 		Query query = em.createQuery(queryString);
 		query.setMaxResults(maxResult);
 		for (Entry<String,Object> e : parameters.entrySet()) {
 			query.setParameter(e.getKey(), e.getValue());
 		}
 		
-		log.info(queryString);
+		logger.debug(queryString);
 		List<?> resultList = query.getResultList();
 		
 		return resultList;
 	}
 
-	@Override
-	public List<?> findByQuery(String queryString, Integer maxResult) {
+	protected List<?> findByQuery(String queryString, Integer maxResult) {
 		Map<String,Object> parameters = new HashMap<>();
 		return findByQuery(queryString, parameters, maxResult);
 	}

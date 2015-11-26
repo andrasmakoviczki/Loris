@@ -11,16 +11,16 @@
 			Results</h1>
 
 		<div class="row">
-		<a href="javascript:history.go(-1);" class="btn btn-default btn-lg"><span
-			th:text="#{search.back}" class="glyphicon glyphicon-circle-arrow-left"></span>
-		</a>
+			<a href="javascript:history.go(-1);" class="btn btn-default btn-lg"><span
+				th:text="#{search.back}"
+				class="glyphicon glyphicon-circle-arrow-left"></span> </a>
 		</div>
-		
+
 		<!-- news -->
 		<div class="row centered-form center-block vertical-center">
 			<div class="container col-md-10 col-md-offset-1">
 				<div class="panel-group" id="accordion">
-					<h2 th:text="#{search.count} + ${feSize}">Found elements: </h2>
+					<h2 th:text="#{search.count} + ${feSize}">Found elements:</h2>
 					<div th:each="feedMap,iterStat : ${feList}">
 						<div th:if="${iterStat.count != 0}">
 							<div class="panel panel-default">
@@ -50,13 +50,13 @@
 												<div id="topic" th:each="t : ${tList}">
 													<p th:text="${t.title}"></p>
 												</div>
-
+												<div th:each="ca : ${fe.category}" style="display: inline">
+													<span th:text="${ca.categoryName}" class="badge">category</span>
+												</div>
 												<p th:text="${fe.content}" class="jumbotron text-justify"></p>
-												<p th:text="#{news.forward}">
-													Forward to site: <a th:attr="href=${fe.link}"
-														th:text="${fe.link}"> </a>
-												</p>
-												<p></p>
+												<p th:text="#{news.forward}">Forward to site:</p>
+												<a th:attr="href=${fe.link}" th:text="${fe.link}"
+													style="word-wrap: break-word;"> </a>
 											</div>
 										</div>
 									</div>

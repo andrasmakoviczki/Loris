@@ -1,10 +1,14 @@
 package edu.elte.spring.loris.backend.util;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 
-public class ParsedURL {
+public class ParsedURL implements Serializable {
+
+	private static final long serialVersionUID = -879385447201813966L;
+
 	String scheme;
 	String username;
 	String password;
@@ -13,6 +17,9 @@ public class ParsedURL {
 	String path;
 	List<NameValuePair> query;
 	String fragment;
+
+	public ParsedURL() {
+	}
 
 	public ParsedURL(String scheme, String username, String password, String host, String port, String path,
 			List<NameValuePair> query, String fragment) {
@@ -32,9 +39,6 @@ public class ParsedURL {
 
 	public String getUsername() {
 		return username;
-	}
-
-	public ParsedURL() {
 	}
 
 	public String getPassword() {
@@ -115,6 +119,5 @@ public class ParsedURL {
 		builder.append("]");
 		return builder.toString();
 	}
-	
-	
+
 }

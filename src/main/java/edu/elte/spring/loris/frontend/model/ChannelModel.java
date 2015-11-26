@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.URL;
 
 public class ChannelModel   {
 	
-	@URL(message="not URL form")
+	@URL(message="This is not valid url.")
 	@NotBlank
 	@NotEmpty
 	private String link;

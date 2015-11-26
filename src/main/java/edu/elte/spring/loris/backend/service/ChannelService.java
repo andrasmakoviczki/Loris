@@ -1,23 +1,29 @@
 package edu.elte.spring.loris.backend.service;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
-import com.sun.syndication.io.FeedException;
-
 import edu.elte.spring.loris.backend.entity.Channel;
-import edu.elte.spring.loris.backend.util.ChannelException;
-import edu.elte.spring.loris.backend.util.UserException;
+import edu.elte.spring.loris.backend.util.exception.ChannelException;
 
 public interface ChannelService {
-	public void createChannel(String channelUrl) throws ChannelException,IllegalArgumentException, FeedException, IOException, UserException, URISyntaxException;
+	// Channel létrehozása
 	public void createChannel(Channel ch);
-	public void updateChannel(Channel ch);
-	public void removeChannel(String chId);
+
+	// Channel törlése
 	public void removeChannel(Channel ch);
-	public Channel findChannel(String id);
-	public Channel findFirstChannelbyUrl(String url) throws ChannelException;
-	public List<Channel> findChannelbyUrl(String url);
+
+	// Channel frissítése
+	public void updateChannel(Channel ch);
+
+	// Channel listázása
 	public List<Channel> listChannel();
+
+	// Channel listázása url alapján
+	public List<Channel> findChannelbyUrl(String url);
+
+	// Channel id alapján
+	public Channel getChannel(String id);
+
+	// Channel url alapján
+	public Channel getChannelbyUrl(String url) throws ChannelException;
 }

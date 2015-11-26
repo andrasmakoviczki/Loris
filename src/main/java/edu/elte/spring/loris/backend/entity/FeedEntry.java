@@ -18,10 +18,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class FeedEntry implements Serializable,Comparable<FeedEntry>{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1047859559427007452L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private String id;

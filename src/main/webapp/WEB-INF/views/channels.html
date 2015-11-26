@@ -7,19 +7,23 @@
 	<div id="navbarfragment" th:include="fragments/navbar :: navbar"></div>
 
 	<div class="container">
-			<h1 th:text="#{channels.title}" class="page-header">Channels</h1>
+		<h1 th:text="#{channels.title}" class="page-header">Channels</h1>
 		<div class="row">
 			<!-- New Channel -->
+			<div th:each="err : ${#fields.errors('*')}">
+				<p th:text="${err}" class="alert alert-danger"></p>
+			</div>
 			<form class="navbar-form navbar-left" action="#"
-				th:action="@{/channels/find}" th:object="${cModel}" method="get">
+				th:action="@{/channels/newChannel}" th:object="${cModel}"
+				method="post">
 				<div class="form-group">
 					<h2 th:text="#{channels.add}">Add new RSS Channel</h2>
-					<input type="text" class="form-control" th:field="*{link}"
-						th:placeholder="#{channels.textarea}" />
 					<div th:if="${#fields.hasErrors('*')}">
 						<p th:each="err : ${#fields.errors('*')}" th:text="${err}"
 							class="alert alert-danger" role="alert"></p>
 					</div>
+					<input type="text" class="form-control" th:field="*{link}"
+						th:placeholder="#{channels.textarea}" />
 					<button th:text="#{channels.submit}" type="submit"
 						class="btn btn-default"></button>
 				</div>
@@ -35,14 +39,12 @@
 					<tr>
 						<th th:text="#{channels.channel.title}">Title</th>
 						<th th:text="#{channels.channel.link}">Url</th>
-						<th th:text="#{channels.channel.language}">Language</th>
 						<th th:text="#{channels.channel.lastpublish}">Last publish</th>
 						<th th:text="#{channels.channel.operations}">Operations</th>
 					</tr>
 					<tr data-th-each="ch : ${cList}">
 						<td data-th-text="${ch.title}"></td>
 						<td data-th-text="${ch.link}"></td>
-						<td data-th-text="${ch.language}"></td>
 						<td
 							data-th-text="${#calendars.format(ch.publishDate,'yyyy. MMMM dd. HH:mm')}"></td>
 						<td style="text-align: center;"><a
@@ -57,29 +59,5 @@
 			</table>
 		</div>
 	</div>
-	</body>
+</body>
 </html>
-
-<!-- Header -->
-<!-- 						<thead> -->
-<!-- 							<tr> -->
-<!-- 								<th class="col-sm-1" data-th-text="#{strategy.list.id.label}">Id</th> -->
-<!-- 								<th class="col-sm-4" data-th-text="#{strategy.list.type.label}">Strategy -->
-<!-- 									Type</th> -->
-<!-- 								<th class="col-sm-4" data-th-text="#{strategy.list.name.label}">Strategy -->
-<!-- 									Name</th> -->
-<!-- 								<th class="col-sm-2" -->
-<!-- 									data-th-text="#{strategy.list.actions.label}">Action</th> -->
-<!-- 							</tr> -->
-<!-- 						</thead> -->
-
-<!-- Tableből -->
-<!-- 								<td style="text-align: center;"><a href="#"> -->
-<!-- 										<button type="button" class="btn btn-default btn-xs"> -->
-<!-- 											<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Edit -->
-<!-- 										</button> -->
-<!-- 								</a>&nbsp; <a href="#"> -->
-<!-- 										<button type="button" class="btn btn-default btn-xs"> -->
-<!-- 											<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Delete -->
-<!-- 										</button> -->
-<!-- 								</a></td> -->

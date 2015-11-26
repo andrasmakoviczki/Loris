@@ -2,12 +2,15 @@ package edu.elte.spring.loris.backend.dao;
 
 import java.util.List;
 
-import edu.elte.spring.loris.backend.dao.model.GeneralEntityManager;
 import edu.elte.spring.loris.backend.entity.Category;
 
-public interface CategoryDao{
+public interface CategoryDao {
+	// Category id alapján
+	public Category getCategory(String id);
 
-	public Category findCategory(String id);
-	public Category findbyCategoryName(String caName);
+	// Category listázása
 	public List<Category> listCategory();
+
+	// Category listázása kategórianév alapján
+	public List<Category> findCategorybyCategoryName(String caName);
 }

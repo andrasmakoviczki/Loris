@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.elte.spring.loris.backend.dao.CategoryDao;
 import edu.elte.spring.loris.backend.dao.CategoryDaoImpl;
 import edu.elte.spring.loris.backend.entity.Category;
 
@@ -14,15 +13,15 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	CategoryDaoImpl caDao;
-	
+
 	public CategoryServiceImpl() {
 	}
 
 	@Override
-	public void createCategory(Category ca) {	
-		if (caDao.findbyCategoryName(ca.getCategoryName()) == null) {
+	public void createCategory(Category ca) {
+		if (caDao.findCategorybyCategoryName(ca.getCategoryName()).isEmpty()) {
 			caDao.insert(ca);
-		}	
+		}
 	}
 
 	@Override
@@ -31,14 +30,8 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public Category findCategory(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Category findCategorybyCategoryname(String caName) {
-		return caDao.findbyCategoryName(caName);
+	public void updateCategory(Category ca) {
+		caDao.merge(ca);
 	}
 
 	@Override
@@ -46,4 +39,19 @@ public class CategoryServiceImpl implements CategoryService {
 		return caDao.listCategory();
 	}
 
+	@Override
+	public Category getCategory(String id) {
+		return caDao.getCategory(id);
+	}
+
+	@Override
+	public Category getCategorybyCategoryname(String caName) {
+		List<Category> caList = caDao.findCategorybyCategoryName(caName);
+
+		if (caList.isEmpty()) {
+			return null;
+		}
+
+		return caList.get(0);
+	}
 }

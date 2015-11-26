@@ -16,10 +16,6 @@ import org.apache.http.message.BasicNameValuePair;
 
 public class URLNormailze {
 
-	public URLNormailze() {
-		this.parsedURL = new ParsedURL();
-	}
-
 	private ParsedURL parsedURL;
 
 	private static final Pattern URL_PATTERN = Pattern
@@ -29,28 +25,32 @@ public class URLNormailze {
 	private static final Pattern USERINFO = Pattern.compile("([-\\w._~!$&'()*+,;=]*):([-\\w._~!$&'()*+,;=]*)");
 	private static final Pattern QUERY = Pattern.compile("&?([-\\w._~!$'()*+,;:@/?]*)=([-\\w._~!$'()*+,;:@/?]*)");
 
-	private ParsedURL URLParse(String url) {
+	public URLNormailze() {
+		this.parsedURL = new ParsedURL();
+	}
+
+	private ParsedURL URLParse(String uri) {
 
 		ParsedURL p = new ParsedURL();
 
-		if (url == null) {
+		if (uri == null) {
 			return null;
 		}
 
-		Matcher urlMatcher = URL_PATTERN.matcher(url);
+		Matcher uriMatcher = URL_PATTERN.matcher(uri);
 
-		if (urlMatcher.find()) {
-			p.setScheme(urlMatcher.group(2));
-			p.setHost(urlMatcher.group(6));
-			p.setPort(urlMatcher.group(8));
-			p.setPath(urlMatcher.group(9));
-			p.setFragment(urlMatcher.group(13));
+		if (uriMatcher.find()) {
+			p.setScheme(uriMatcher.group(2));
+			p.setHost(uriMatcher.group(6));
+			p.setPort(uriMatcher.group(8));
+			p.setPath(uriMatcher.group(9));
+			p.setFragment(uriMatcher.group(13));
 		} else {
 			return null;
 		}
 
-		if (urlMatcher.group(4) != null) {
-			Matcher userinfoMatcher = USERINFO.matcher(urlMatcher.group(4));
+		if (uriMatcher.group(4) != null) {
+			Matcher userinfoMatcher = USERINFO.matcher(uriMatcher.group(4));
 			if (userinfoMatcher.find()) {
 				p.setUsername(userinfoMatcher.group(1));
 				p.setPassword(userinfoMatcher.group(2));
@@ -58,8 +58,8 @@ public class URLNormailze {
 		}
 
 		List<NameValuePair> queryList = new ArrayList<>();
-		if (urlMatcher.group(11) != null) {
-			Matcher queryMatcher = QUERY.matcher(urlMatcher.group(11));
+		if (uriMatcher.group(11) != null) {
+			Matcher queryMatcher = QUERY.matcher(uriMatcher.group(11));
 
 			while (queryMatcher.find()) {
 				NameValuePair keyValue = new BasicNameValuePair(queryMatcher.group(1), queryMatcher.group(2));
@@ -73,55 +73,57 @@ public class URLNormailze {
 
 	private URI BuildURI() throws URISyntaxException {
 
-		URIBuilder uBuilder = new URIBuilder()
-				.setHost(parsedURL.getHost());
-		
-		if(parsedURL.getScheme() != null){
+		URIBuilder uBuilder = new URIBuilder().setHost(parsedURL.getHost());
+
+		if (parsedURL.getScheme() != null) {
 			uBuilder.setScheme(parsedURL.getScheme());
-		}else {
+		} else {
 			uBuilder.setScheme("http");
 		}
-		
-		if(parsedURL.getUsername() != null && parsedURL.getPassword() != null){
+
+		if (parsedURL.getUsername() != null && parsedURL.getPassword() != null) {
 			uBuilder.setUserInfo(parsedURL.getUsername(), parsedURL.getPassword());
 		}
-		
-		if(!parsedURL.getQuery().isEmpty()){
+
+		if (!parsedURL.getQuery().isEmpty()) {
 			uBuilder.addParameters(parsedURL.getQuery());
 		}
-		
-		if(parsedURL.getPath() != null){
+
+		if (parsedURL.getPath() != null) {
 			uBuilder.setPath(parsedURL.getPath());
 		}
 
-		if(parsedURL.getFragment() != null){
+		if (parsedURL.getFragment() != null) {
 			uBuilder.setFragment(parsedURL.getFragment());
 		}
-		
-		if(parsedURL.getPort() != null){
+
+		if (parsedURL.getPort() != null) {
 			uBuilder.setPort(Integer.parseInt(parsedURL.getPort()));
 		}
 
 		URI u = uBuilder.build();
-		
+
 		return u;
 	}
 
-	public URL normailze(String url) throws MalformedURLException, URISyntaxException {
+	public URL normailze(String uri) throws MalformedURLException, URISyntaxException {
 
-		String lowerUrl = url.toLowerCase();
+		// Kapott uri szétbontása és minta helyesség ellenőrzése
+		String lowerUrl = uri.toLowerCase();
 		parsedURL = URLParse(lowerUrl);
-		URI u = BuildURI();
-		UrlValidator validator = new UrlValidator();
-		URL normalUrl;
-		if(validator.isValid(u.toString())){
-			normalUrl = u.toURL();
-		} else
-		{
-			throw new URISyntaxException(u.toString(), "Cannot parse ");
-		}
-		
-		return normalUrl;
 
+		// Valid uri építése a kapott uriból
+		URI u = BuildURI();
+
+		// URL validáció
+		UrlValidator validator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
+		URL normalUrl;
+		if (validator.isValid(u.toString())) {
+			normalUrl = u.toURL();
+		} else {
+			throw new URISyntaxException(u.toString(), "Cannot parse " + uri);
+		}
+
+		return normalUrl;
 	}
 }

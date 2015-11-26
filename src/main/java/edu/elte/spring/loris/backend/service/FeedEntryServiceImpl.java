@@ -6,28 +6,24 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.elte.spring.loris.backend.dao.FeedEntryDao;
 import edu.elte.spring.loris.backend.dao.FeedEntryDaoImpl;
 import edu.elte.spring.loris.backend.entity.Channel;
 import edu.elte.spring.loris.backend.entity.FeedEntry;
-import edu.elte.spring.loris.backend.entity.Subscription;
 import edu.elte.spring.loris.backend.entity.Topic;
-import edu.elte.spring.loris.backend.util.UserException;
 
 @Service
 public class FeedEntryServiceImpl implements FeedEntryService {
-
-	private static final Logger logger = LoggerFactory.getLogger(FeedEntryServiceImpl.class);
 
 	@Autowired
 	FeedEntryDaoImpl feDao;
 	@Autowired
 	TopicService tService;
+	
+	public FeedEntryServiceImpl(){
+	}
 
 	@Override
 	public void createFeedEntry(FeedEntry fe) {
@@ -38,10 +34,13 @@ public class FeedEntryServiceImpl implements FeedEntryService {
 	public void removeFeedEntry(FeedEntry fe) {
 		feDao.remove(fe);
 	}
-
+	
 	@Override
-	public FeedEntry findFeedEntry(String id) {
-		return feDao.findFeedEntry(id);
+	public void updateFeedEntry(FeedEntry fe) {
+		FeedEntry feedEntry = feDao.getFeedEntry(fe.getId());
+		feedEntry.setLabeled(fe.getLabeled());
+		feedEntry.setTopic(fe.getTopic());
+		feDao.merge(feedEntry);
 	}
 
 	@Override
@@ -50,48 +49,19 @@ public class FeedEntryServiceImpl implements FeedEntryService {
 	}
 
 	@Override
+	public FeedEntry getFeedEntry(String id) {
+		return feDao.getFeedEntry(id);
+	}
+
+
+	@Override
 	public Set<FeedEntry> findFeedEntrybyDate(Date date) {
-		return null;
+		return feDao.findFeedEntrybyDate(date);
 	}
 
 	@Override
 	public FeedEntry getLastFeedEntrybyChannel(Channel ch) {
-		return feDao.selectLastFeedEntryByChannel(ch);
-	}
-
-	@Override
-	public void updateFeedEntry(FeedEntry fe) {
-		FeedEntry feedEntry = feDao.findFeedEntry(fe.getId());
-		feedEntry.setLabeled(fe.getLabeled());
-		feedEntry.setTopic(fe.getTopic());
-		feDao.merge(feedEntry);
-	}
-
-	@Override
-	public Set<FeedEntry> findTopic(String feId, Integer topicNumber) {
-		FeedEntry fe = findFeedEntry(feId);
-
-		Set<FeedEntry> recommendFeedEntry = new TreeSet<>();
-		List<Topic> topics = fe.getTopic();
-
-		Integer currentTopicNumber = 0;
-		for (Topic topic : topics) {
-			List<Topic> listedTopics = tService.listTopicbyTopicName(topic.getTopicName());
-			for (Topic t : listedTopics) {
-				// t.getFeedEntry()
-				if (t.getFeedEntry() != feId) {
-					FeedEntry f = findFeedEntry(t.getFeedEntry());
-					recommendFeedEntry.add(f);
-					currentTopicNumber = currentTopicNumber + 1;
-				}
-
-				if (currentTopicNumber == topicNumber) {
-					break;
-				}
-			}
-		}
-
-		return recommendFeedEntry;
+		return feDao.getLastFeedEntryByChannel(ch);
 	}
 
 	@Override
@@ -100,28 +70,46 @@ public class FeedEntryServiceImpl implements FeedEntryService {
 	}
 
 	@Override
-	public List<Set<FeedEntry>> findFeedEntrybyUser() throws UserException {
-
-		/*
-		 * List<Subscription> sList = sService.findSubscriptionbyCurrentUser();
-		 * List<Channel> cList = new ArrayList<>(); for (Subscription s : sList)
-		 * { cList.add(s.getChannel()); }
-		 * 
-		 * List<Set<FeedEntry>> feList = new ArrayList<>();
-		 * 
-		 * for (Channel ch : cList) { feList.add(findFeedEntrybyChannel(ch)); }
-		 */
-
-		return null;
-	}
-
-	@Override
-	public Set<FeedEntry> listbyChannelAfterRegistration(Channel ch, Date registrationDate) {
+	public Set<FeedEntry> findbyChannelAfterRegistration(Channel ch, Date registrationDate) {
 		return feDao.listbyChannelAfterRegistration(ch,registrationDate);
 	}
 
 	@Override
 	public Set<FeedEntry> findbyChannelAfterRegistration(Channel ch, Date registrationDate, String term) {
 		return feDao.findbyChannelAfterRegistration(ch,registrationDate,term);
+	}
+	
+	@Override
+	public Set<FeedEntry> findTopic(String feId, Integer topicNumber) {
+		
+		//FeedEntry lekérdezése id alapján
+		FeedEntry fe = getFeedEntry(feId);
+
+		Set<FeedEntry> recommendFeedEntry = new TreeSet<>();
+		List<Topic> topics = new ArrayList<>();
+		topics = tService.listTopicbyFeedEntry(feId);
+		FeedEntry feed = feDao.getFeedEntry(feId);
+
+		Integer currentTopicNumber = 0;
+		
+		//Topic keresése aktuális topic alapján
+		for (Topic topic : topics) {
+			List<Topic> listedTopics = tService.listTopicbyTopicName(topic.getTopicName());
+			for (Topic t : listedTopics) {
+				if (!t.getFeedEntry().equals(feId)) {
+					FeedEntry f = getFeedEntry(t.getFeedEntry());
+					if(!f.getTitle().equals(feed.getTitle())){
+						recommendFeedEntry.add(f);
+						currentTopicNumber = currentTopicNumber + 1;
+					}
+				}
+
+				if (currentTopicNumber.equals(topicNumber)) {
+					break;
+				}
+			}
+		}
+
+		return recommendFeedEntry;
 	}
 }

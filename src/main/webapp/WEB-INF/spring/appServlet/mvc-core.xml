@@ -8,7 +8,6 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 
-	<!-- <mvc:annotation-driven conversion-service="conversionService"/> -->
 	<mvc:annotation-driven />
 
 	<context:component-scan base-package="edu.elte.spring.loris" />
@@ -16,8 +15,6 @@
 	<import resource="mvc-view.xml" />
 
 	<context:annotation-config />
-
-
 
 	<bean id="jacksonMessageConverter"
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">

@@ -22,14 +22,11 @@
 		</property>
 	</bean>
 
-<!-- <bean id="alma" class="org.springframework.web.servlet.view.InternalResourceViewResolver" /> -->
-
-	<bean id="korte" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+	<bean id="viewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
 		<property name="templateEngine" ref="templateEngine" />
 		<property name="characterEncoding" value="UTF-8" />
 		<property name="contentType" value="text/html; charset=UTF-8" />
 	</bean>
-
 
 	<!-- Fragments -->
 	<bean name="content-part" class="org.thymeleaf.spring4.view.ThymeleafView">
@@ -40,14 +37,5 @@
 				c:selectorExpression="content" />
 		</property>
 	</bean>
-
-	<!-- <bean name="content-part" class="org.thymeleaf.spring4.view.ThymeleafView"> -->
-	<!-- <property name="fragmentSpec"> -->
-	<!-- <bean -->
-	<!-- class="org.thymeleaf.standard.fragment.StandardDOMSelectorFragmentSpec" -->
-	<!-- c:selectorExpression="#content" /> -->
-	<!-- </property> -->
-	<!-- <property name="templateName" value="index" /> -->
-	<!-- </bean> -->
-
+	
 </beans>

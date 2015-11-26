@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,9 +74,12 @@ public class JobServer {
 	public void CreateContext(String scheme, String host, Integer port, String context, String jarPath)
 			throws URISyntaxException, ClientProtocolException, IOException {
 		client = HttpClients.createDefault();
-
+		
+		String uploadFilePath = new File(this.getClass().getResource(jarPath).toURI()).toString();
+						
 		URI uri = new URIBuilder().setScheme(scheme).setHost(host).setPort(port).setPath("/contexts/" + context)
-				.addParameter("dependent-jar-uris", jarPath).build();
+				.addParameter("dependent-jar-uris","file://" + uploadFilePath).build();
+
 		HttpPost post = new HttpPost(uri);
 		response = client.execute(post);
 		logger.info("CreateContext status:" + response.getStatusLine().toString());
@@ -143,7 +147,7 @@ public class JobServer {
 			String rowId = rowIdTopicPair.getString("rowId");
 			JSONArray topicArray = rowIdTopicPair.getJSONArray("topic");
 
-			FeedEntry fe = feService.findFeedEntry(rowId);
+			FeedEntry fe = feService.getFeedEntry(rowId);
 
 			for (int j = 0; j < topicArray.length(); ++j) {
 				Topic topic = new Topic();
@@ -164,15 +168,16 @@ public class JobServer {
 		logger.info("JSON processing successful");
 	}
 
-	@Scheduled(fixedDelay = 300000)
+	@Scheduled(fixedDelay = 60000)
 	public void JobServerServiceMethod() {
 
 		String scheme = "http";
 		String host = "localhost";
 		Integer port = 8090;
 		String contextName = "lorisContext";
-		String jarPath = "file:///home/andris/jars/bundle.jar";
-		String appPath = "/resources/ScalaPi-0.0.1-SNAPSHOT.jar";
+		// file:///home/andris/workspace/Loris/src/main/resources/jars/Bundle.jar
+		String jarPath = "/jars/Bundle.jar";
+		String appPath = "/jars/Lda-1.0.0-SNAPSHOT.jar";
 		String appName = "lorisSpark";
 		String classPath = "edu.elte.spring.loris.spark.model.Lda";
 		String sync = "true";
@@ -188,16 +193,27 @@ public class JobServer {
 		Map<String, String> appArguments = new HashMap<>();
 
 		try {
+			
+			if(!ConnectionCheck.portIsOpen(scheme,host,port,3000)){
+				logger.warn("Cannot connect to " + scheme + "://" + host + ":" + port);
+				return;
+			}
+
+			//Context-ek listázása 
 			List<String> contexts = ListContext(scheme, host, port);
 
 			if (!contexts.contains(contextName)) {
+				//Ha nem létezik, context létrehozása
 				CreateContext(scheme, host, port, contextName, jarPath);
 			}
 
+			//Program feltöltése
 			JarUpload(scheme, host, port, appPath, appName);
+			//Program elindítása
 			String result = StartJob(scheme, host, port, appParameters, appArguments);
 
 			if (result != null) {
+				//Eredmény feldolgozása
 				ProcessJSON(result);
 			}
 		} catch (JSONException | ParseException | URISyntaxException | IOException e) {

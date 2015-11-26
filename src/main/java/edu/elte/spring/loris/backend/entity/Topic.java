@@ -11,9 +11,6 @@ import javax.persistence.Id;
 @Entity
 public class Topic implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7625389095191812618L;
 
 	@Id
@@ -22,10 +19,8 @@ public class Topic implements Serializable {
 
 	@Column(name = "TOPIC_NAME")
 	private String topicName;
-
 	@Column(name = "TOPIC_VALUE")
 	private Double topicValue;
-
 	@Column(name = "FEEDENTRY_ID")
 	private String feedEntryId;
 

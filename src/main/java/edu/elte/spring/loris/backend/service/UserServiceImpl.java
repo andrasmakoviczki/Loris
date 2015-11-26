@@ -3,87 +3,81 @@ package edu.elte.spring.loris.backend.service;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import edu.elte.spring.loris.backend.dao.UserDao;
 import edu.elte.spring.loris.backend.dao.UserDaoImpl;
 import edu.elte.spring.loris.backend.entity.User;
-import edu.elte.spring.loris.backend.util.UserException;
+import edu.elte.spring.loris.backend.util.exception.UserException;
 
 @Service
 public class UserServiceImpl implements UserService {
-	private static final Logger logger = LoggerFactory.getLogger(ChannelServiceImpl.class);
-	
+
 	@Autowired
-	UserDaoImpl userDao;
-	
+	UserDaoImpl uDao;
+
+	public UserServiceImpl() {
+	}
+
 	@Override
-	public void createUser(User user) throws UserException {
-		
-		if (userDao.findUserbyUsername(user.getUsername()) != null) {
-			throw new UserException("User already exists:" + user.getUsername());
+	public void createUser(User u) throws UserException {
+
+		if (uDao.findUserbyUsername(u.getUsername()) != null) {
+			throw new UserException("User already exists: " + u.getUsername());
 		}
-		
+
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		
-		user.setPassword(passwordEncoder.encode(user.getPassword()));		
-		user.setCreateDate(new Date());
-		user.setLastLogin(new Date());
-		user.setEnable(true);
-		
-		userDao.insert(user);
+
+		u.setPassword(passwordEncoder.encode(u.getPassword()));
+		u.setCreateDate(new Date());
+		u.setLastLogin(new Date());
+		u.setEnable(true);
+
+		uDao.insert(u);
 	}
 
 	@Override
-	public void removeUser() {
-		// TODO Auto-generated method stub
-		
+	public void removeUser(User u) {
+		uDao.remove(u);
 	}
 
 	@Override
-	public User findUser(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public void updateUser(User u) {
+		uDao.merge(u);
+	}
+
+	@Override
+	public User getUser(String id) {
+		return uDao.getUser(id);
 	}
 
 	@Override
 	public List<User> listUser() {
-		// TODO Auto-generated method stub
-		return null;
+		return uDao.listUser();
 	}
 
 	@Override
-	public User findUserbyUsername(String username) {
-		return userDao.findUserbyUsername(username);
+	public User getUserbyUsername(String username) {
+		return uDao.findUserbyUsername(username);
 	}
 
 	@Override
 	public User getCurrentUser() throws UserException {
-		Object u = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
+
 		String username = new String();
-		if (u instanceof String) {
-			username = (String) u;
-		}
-		else if(u instanceof org.springframework.security.core.userdetails.User){
+		Object u = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (u instanceof org.springframework.security.core.userdetails.User) {
 			username = ((org.springframework.security.core.userdetails.User) u).getUsername();
 		}
-		
-		User user = findUserbyUsername(username);
-		
+
+		User user = getUserbyUsername(username);
 		if (user == null) {
 			throw new UserException("No such user: " + username);
 		}
-		
-		logger.info("CurrentUser: ",user.toString());
+
 		return user;
 	}
-
-
 }

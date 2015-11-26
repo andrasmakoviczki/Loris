@@ -10,8 +10,8 @@
 	<div id="navbarfragment" th:include="fragments/navbar :: navbar"></div>
 
 	<div class="container">
-		<h1 th:text="#{home.welcome}" class="text-center page-header">Welcome to
-			Loris!</h1>
+		<h1 th:text="#{home.welcome}" class="text-center page-header">Welcome
+			to Loris!</h1>
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-login">
@@ -32,48 +32,58 @@
 								<div id="login-form" style="display: none;">
 									<p>alma</p>
 								</div>
+								
+								<div th:each="err : ${#fields.errors('user')}">
+									<p th:text="${err}" class="alert alert-danger"></p>
+								</div>
 
 								<form id="register-form" th:action="@{/register}"
 									th:object="${user}" method="post" role="form"
 									style="display: block;">
 									<div class="form-group">
+										<div th:each="err : ${#fields.errors('username')}">
+											<p th:text="${err}" class="alert alert-danger"></p>
+										</div>
 										<input type="text" name="username" id="username" tabindex="1"
 											th:field="*{username}" class="form-control"
 											th:placeholder="#{home.username}" value="" />
-										<p th:if="${#fields.hasErrors('username')}"
-											th:errors="*{username}">Incorrect date</p>
 									</div>
+
 									<div class="form-group">
+										<div th:each="err : ${#fields.errors('fullname')}">
+											<p th:text="${err}" class="alert alert-danger"></p>
+										</div>
 
 										<input type="text" name="name" id="name" tabindex="1"
 											th:field="*{fullname}" class="form-control"
 											th:placeholder="#{home.name}" value="" />
-
-										<p th:if="${#fields.hasErrors('fullname')}"
-											th:errors="*{fullname}">Incorrect date</p>
 									</div>
+
 									<div class="form-group">
+										<div th:each="err : ${#fields.errors('email')}">
+											<p th:text="${err}" class="alert alert-danger"></p>
+										</div>
+
 										<input type="email" name="email" id="email" tabindex="1"
 											th:field="*{email}" class="form-control"
 											th:placeholder="#{home.email}" value="" />
-
-										<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect
-											date</p>
 									</div>
 									<div class="form-group">
+										<div th:each="err : ${#fields.errors('password')}">
+											<p th:text="${err}" class="alert alert-danger"></p>
+										</div>
 										<input type="password" name="password" id="password"
 											th:field="*{password}" tabindex="2" class="form-control"
 											th:placeholder="#{home.password}" placeholder="Password" />
-										<p th:if="${#fields.hasErrors('password')}"
-											th:errors="*{password}">Incorrect date</p>
 									</div>
 									<div class="form-group">
+										<div th:each="err : ${#fields.errors('passwordConfirm')}">
+											<p th:text="${err}" class="alert alert-danger"></p>
+										</div>
 										<input type="password" name="confirm-password"
 											id="confirm-password" th:field="*{passwordConfirm}"
 											tabindex="2" class="form-control"
 											th:placeholder="#{home.confirmpassword}" />
-										<p th:if="${#fields.hasErrors('passwordConfirm')}"
-											th:errors="*{passwordConfirm}">Incorrect date</p>
 									</div>
 
 									<div class="form-group">
@@ -87,7 +97,6 @@
 										</div>
 									</div>
 								</form>
-
 							</div>
 						</div>
 					</div>

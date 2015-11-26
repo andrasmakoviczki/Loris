@@ -13,13 +13,13 @@
 		</property>
 	</bean>
 
-	<!-- <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/> -->
-	<context:annotation-config />
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+
 	<bean id="pum"
 		class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
 		<property name="persistenceXmlLocations">
 			<list>
-				<value>classpath:META-INF/persistence.xml</value>
+				<value>classpath:/META-INF/persistence.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -38,63 +38,5 @@
 			</props>
 		</property>
 	</bean>
-
-<!-- 	<bean id="CategoryService" -->
-<!-- 		class="edu.elte.spring.loris.backend.service.CategoryServiceImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 		<property name="caDao" ref="categoryDao" /> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="categoryDao" class="edu.elte.spring.loris.backend.dao.CategoryDaoImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="ChannelService" -->
-<!-- 		class="edu.elte.spring.loris.backend.service.ChannelServiceImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 		<property name="chDao" ref="channelDao" /> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="channelDao" class="edu.elte.spring.loris.backend.dao.ChannelDaoImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="FeedEntryService" -->
-<!-- 		class="edu.elte.spring.loris.backend.service.FeedEntryServiceImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 		<property name="feDao" ref="dao" /> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="dao" class="edu.elte.spring.loris.backend.dao.FeedEntryDaoImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="SubscriptionService" -->
-<!-- 		class="edu.elte.spring.loris.backend.service.SubscriptionServiceImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 		<property name="sDao" ref="subscriptionDao" /> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="subscriptionDao" class="edu.elte.spring.loris.backend.dao.SubscriptionDaoImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="TopicService" class="edu.elte.spring.loris.backend.service.TopicServiceImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 		<property name="tDao" ref="topicDao" /> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="topicDao" class="edu.elte.spring.loris.backend.dao.TopicDaoImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="UserService" class="edu.elte.spring.loris.backend.service.UserServiceImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 		<property name="userDao" ref="userdao" /> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="userdao" class="edu.elte.spring.loris.backend.dao.UserDaoImpl" -->
-<!-- 		scope="singleton"> -->
-<!-- 	</bean> -->
 
 </beans>

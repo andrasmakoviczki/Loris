@@ -3,33 +3,27 @@ package edu.elte.spring.loris.backend.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
-
-import edu.elte.spring.loris.backend.dao.model.GeneralEntityManager;
 import edu.elte.spring.loris.backend.dao.model.GeneralEntityManagerImpl;
 import edu.elte.spring.loris.backend.entity.Category;
-import org.springframework.stereotype.Repository;
+
+
 @Repository
 public class CategoryDaoImpl extends GeneralEntityManagerImpl<Category> implements CategoryDao {
 
-	private static final Logger logger = LoggerFactory.getLogger(CategoryDaoImpl.class);
-
-
-	/*public CategoryDaoImpl() {
-		em = new GeneralEntityManagerImpl("hbase-pu");
-	}*/
-
 	@Override
-	public Category findCategory(String id) {
+	public Category getCategory(String id) {
 		Category ca = findById(Category.class, id);
 		return ca;
 	}
 
 	@Override
-	public List<Category> listCategory() {
-		List<?> q = findByQuery("select ca from Category ca");
+	public List<Category> findCategorybyCategoryName(String caname) {
+
+		String query = new String(
+				"SELECT ca FROM " + Category.class.getSimpleName() + " ca WHERE ca.categoryName=:caname");
+		List<?> q = findByQuery(query, "caname", caname);
 
 		List<Category> caList = new ArrayList<>();
 		for (Object object : q) {
@@ -42,15 +36,8 @@ public class CategoryDaoImpl extends GeneralEntityManagerImpl<Category> implemen
 	}
 
 	@Override
-	public Category findbyCategoryName(String caname) {
-
-		String query = new String(
-				"select ca from " + Category.class.getSimpleName() + " ca where ca.categoryName=:caname");
-		List<?> q = findByQuery(query, "caname", caname);
-
-		if (q.isEmpty()) {
-			return null;
-		}
+	public List<Category> listCategory() {
+		List<?> q = findByQuery("SELECT ca FROM Category ca");
 
 		List<Category> caList = new ArrayList<>();
 		for (Object object : q) {
@@ -59,7 +46,7 @@ public class CategoryDaoImpl extends GeneralEntityManagerImpl<Category> implemen
 			}
 		}
 
-		return caList.get(0);
+		return caList;
 	}
 
 }

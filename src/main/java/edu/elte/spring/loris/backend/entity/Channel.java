@@ -8,15 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-//import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 
 @Entity
 public class Channel implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -67196401224889676L;
 	
 	@Id

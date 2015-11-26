@@ -7,32 +7,26 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- DispatcherServlet Context: defines this servlet's request-processing 
-		infrastructure -->
-
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
 		up static resources in the ${webappRoot}/resources directory -->
-	<resources mapping="/resources/**" location="/resources/" />
-	<!-- <resources mapping="/static/**" location="/WEB-INF/views/" /> -->
+	<resources mapping="/resources/**" location="/WEB-INF/resources/" />
+	<resources mapping="/views/**" location="/WEB-INF/views/" />
 
-
-<!-- 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" /> -->
-		<context:annotation-config />
+	<context:annotation-config />
+	
 	<context:component-scan base-package="edu.elte.spring.loris" />
 	<context:component-scan base-package="edu.elte.spring.loris.backend.dao" />
 	<context:component-scan base-package="edu.elte.spring.loris.backend.dao.model" />
 	<context:component-scan base-package="edu.elte.spring.loris.backend.service" />
-		
-
 
 	<beans:bean class="org.springframework.web.filter.RequestContextFilter" />
 
 	<beans:import resource="thread.xml" />
 	<beans:import resource="kundera-context.xml" />
 	<beans:import resource="mvc-core.xml" />
-	
+
 
 </beans:beans>
