@@ -18,7 +18,7 @@ public class StreamingChannel {
 	public StreamingChannel() {
 	}
 
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(fixedDelay = 300000)
 	public void Streaming(){
 		try {
 			String HBaseConnection = "http://localhost:16020";

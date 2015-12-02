@@ -45,8 +45,8 @@
 					<tr data-th-each="ch : ${cList}">
 						<td data-th-text="${ch.title}"></td>
 						<td data-th-text="${ch.link}"></td>
-						<td
-							data-th-text="${#calendars.format(ch.publishDate,'yyyy. MMMM dd. HH:mm')}"></td>
+						<td 
+							data-th-text="${ch.publishDate != null ? #calendars.format(ch.publishDate,'yyyy. MMMM dd. HH:mm') : ''}"></td>
 						<td style="text-align: center;"><a
 							data-th-href="@{/channels/delete(id=${ch.id})}">
 								<button type="button" class="btn btn-default btn-xs">

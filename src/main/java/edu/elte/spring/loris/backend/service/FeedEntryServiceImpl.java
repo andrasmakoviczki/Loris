@@ -82,9 +82,6 @@ public class FeedEntryServiceImpl implements FeedEntryService {
 	@Override
 	public Set<FeedEntry> findTopic(String feId, Integer topicNumber) {
 		
-		//FeedEntry lekérdezése id alapján
-		FeedEntry fe = getFeedEntry(feId);
-
 		Set<FeedEntry> recommendFeedEntry = new TreeSet<>();
 		List<Topic> topics = new ArrayList<>();
 		topics = tService.listTopicbyFeedEntry(feId);

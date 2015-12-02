@@ -70,7 +70,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		URLNormailze urlNorm = new URLNormailze();
 		URL url = urlNorm.normailze(channelUrl);
 
-		if (!chService.findChannelbyUrl(url.toString()).isEmpty()) {
+		Channel testChannel = new Channel();
+		testChannel.setLink(channelUrl);	
+		if (!findSubscriptionbyChannel(testChannel).isEmpty()){
 			throw new ChannelException(String.format("Channel already exists: %s", channelUrl));
 		}
 
@@ -81,6 +83,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		Date createDate = new Date();
 		ch.setCreateDate(createDate);
 		ch.setLink(url.toString());
+		if (ch.getPublishDate() == null){
+			ch.setPublishDate(new Date());
+		}
 		chService.createChannel(ch);
 
 		// Aktuális user kiválasztása
@@ -214,10 +219,14 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 			FeedHandler feeder;
 			feeder = new FeedHandler(new URL(ch.getLink()));
 
+			if(feeder.getFeed().getPublishedDate() == null){
+				feeder.getFeed().setPublishedDate(ch.getCreateDate());				
+			}
+			
 			// Ha új a csatorna, vagy a csatorna régebben lett frissítve,
-			// mint a legújabb feed
+			// mint a legújabb feed			
 			if (ch.getLastUpdate() == null || ch.getPublishDate().before(feeder.getFeed().getPublishedDate())) {
-
+		
 				// frissíti a csatorna dátumait
 				ch.setPublishDate(feeder.getFeed().getPublishedDate());
 				ch.setLastUpdate(new Date());
@@ -235,6 +244,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 				List<FeedEntry> cList = feeder.FeedEntryBuild();
 				for (FeedEntry fe : cList) {
 
+					if (fe.getPublishDate() == null){
+						fe.setPublishDate(new Date());
+					}
+					
 					if (!lastEntryDate.before(fe.getPublishDate())) {
 						break;
 					}
